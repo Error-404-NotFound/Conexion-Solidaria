@@ -5,17 +5,17 @@ import { MdLocationOn } from 'react-icons/md';
 
 const Login = () => {
     return (
-        <div className="flex justify-center items-center min-h-screen bg-gray-100">
-            <div className="bg-white p-10 rounded-lg shadow-lg max-w-md w-full">
+        <div className="flex justify-center items-center min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans">
+            <div className="bg-white p-10 rounded-lg shadow-lg max-w-md w-full dark:bg-black dark:text-white">
                 <h2 className="text-2xl font-bold mb-6 text-center">Please Login</h2>
                 <form className="space-y-6">
                     {/* Email Field */}
-                    <div className="flex items-center border-b border-gray-300 py-2">
+                    <div className="flex items-center border-b border-gray-300 py-2 dark:text-white">
                         <AiOutlineMail className="text-gray-500 mr-3" />
                         <input
                             type="email"
                             placeholder="Enter your email"
-                            className="w-full outline-none focus:border-indigo-500"
+                            className="w-full outline-none focus:border-indigo-500 dark:text-black"
                         />
                     </div>
 
@@ -25,7 +25,7 @@ const Login = () => {
                         <input
                             type="password"
                             placeholder="Enter your password"
-                            className="w-full outline-none focus:border-indigo-500"
+                            className="w-full outline-none focus:border-indigo-500 dark:text-black"
                         />
                     </div>
 

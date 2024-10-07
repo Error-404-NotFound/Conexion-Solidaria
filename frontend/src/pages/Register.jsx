@@ -56,15 +56,15 @@ const {
 
 
   return (
-    <div className="flex justify-center items-center pt-14 min-h-screen bg-gray-100 mt-10">
-      <div className="bg-white p-8 rounded-lg shadow-md">
+    <div className="flex justify-center items-center pt-14 min-h-screen bg-gray-100 mt-10 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans">
+      <div className="bg-white p-8 rounded-lg shadow-md dark:bg-black dark:text-white">
         <h2 className="text-3xl font-bold text-center mb-6">Please Register</h2>
 
         {/* form data */}
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex items-center gap-5">
             <div className="mb-4">
-                <label htmlFor="name" className="block text-gray-700 font-bold">
+                <label htmlFor="name" className="block text-gray-700 font-bold dark:text-white">
                     <AiOutlineUser className="inline-block mr-2 mb-1 text-lg" />
                     Name
                 </label>
@@ -72,11 +72,11 @@ const {
                     type="text"
                     placeholder="Enter Your Name"
                     {...register("name", { required: true })}
-                    className="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring focus:ring focus:border-blue-300"
+                    className="dark:placeholder-black w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring focus:ring focus:border-blue-300 dark:text-black"
                 />
             </div>
             <div className="mb-4">
-                <label htmlFor="email" className="block text-gray-700 font-bold">
+                <label htmlFor="email" className="block text-gray-700 font-bold dark:text-white">
                     <AiOutlineMail className="inline-block mr-2 mb-1 text-lg" />
                     Email
                 </label>
@@ -84,13 +84,13 @@ const {
                     type="email"
                     placeholder="Enter Your Email"
                     {...register("email", { required: true })}
-                    className="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring focus:ring focus:border-blue-300"
+                    className="dark:placeholder-black w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring focus:ring focus:border-blue-300 dark:text-black"
                 />
             </div>
           </div>
           <div className="flex items-center gap-5">
             <div className="mb-4">
-                <label htmlFor="password" className="block text-gray-700 font-bold">
+                <label htmlFor="password" className="block text-gray-700 font-bold dark:text-white">
                     <AiOutlineLock className="inline-block mr-2 mb-1 text-lg" />
                     Password
                 </label>
@@ -98,11 +98,11 @@ const {
                     type="password"
                     placeholder="Enter Your Password"
                     {...register("password", { required: true })}
-                    className="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring focus:ring focus:border-blue-300"
+                    className="dark:placeholder-black w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring focus:ring focus:border-blue-300 dark:text-black"
                 />
             </div>
             <div className="mb-4">
-                <label htmlFor="confirmPassword" className="block text-gray-700 font-bold">
+                <label htmlFor="confirmPassword" className="block text-gray-700 font-bold dark:text-white">
                     <AiOutlineLock className="inline-block mr-2 mb-1 text-lg" />
                     Confirm Password
                 </label>
@@ -110,13 +110,13 @@ const {
                     type="password"
                     placeholder="Confirm Your Password"
                     {...register("confirmPassword", { required: true, validate: (value) => value === password || "Passwords do not match" })}
-                    className="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring focus:ring focus:border-blue-300"
+                    className="dark:placeholder-black w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring focus:ring focus:border-blue-300 dark:text-black"
                 />
             </div>
           </div>
           <div className="flex items-center gap-5">
             <div className="mb-4">
-                <label htmlFor="phoneNumber" className="block text-gray-700 font-bold">
+                <label htmlFor="phoneNumber" className="block text-gray-700 font-bold dark:text-white">
                     <AiOutlinePhone className="inline-block mr-2 mb-1 text-lg" />
                     Phone Number
                 </label>
@@ -124,11 +124,11 @@ const {
                     type="tel"
                     placeholder="Enter Your Phone Number"
                     {...register("phone", { required: true })}
-                    className="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring focus:ring focus:border-blue-300"
+                    className="dark:placeholder-black w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring focus:ring focus:border-blue-300 dark:text-black"
                 />
             </div>
             <div className="mb-4">
-                <label htmlFor="photoUrl" className="block text-gray-700 font-bold">
+                <label htmlFor="photoUrl" className="block text-gray-700 font-bold dark:text-white">
                     <AiOutlinePicture className="inline-block mr-2 mb-1 text-lg" />
                     Photo URL
                 </label>
@@ -136,19 +136,19 @@ const {
                     type="text"
                     placeholder="Enter Your Photo URL"
                     {...register("photoUrl", { required: true })}
-                    className="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring focus:ring focus:border-blue-300"
+                    className="dark:placeholder-black w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring focus:ring focus:border-blue-300 dark:text-black"
                 />
             </div>
           </div>
 
           <div>
             <div className="mb-4">
-                <label htmlFor="gender" className="block text-gray-700 font-bold">
+                <label htmlFor="gender" className="block text-gray-700 font-bold dark:text-white">
                     <AiOutlineUser className="inline-block mr-2 mb-1 text-lg" />
                     Gender
                 </label>
-                <select {...register ("gender", {required: true})} className="w-full border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring focus:border-blue">
-                    <option value="">Select Gender</option>
+                <select {...register ("gender", {required: true})} className="w-full border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring focus:border-blue dark:placeholder-black dark:text-gray-300 dark:bg-white dark:text-black">
+                    <option value="" >Select Gender</option>
                     <option value="male">Male</option>
                     <option value="female">Female</option>
                     <option value="other">Other</option>
@@ -156,7 +156,7 @@ const {
                 </select>
             </div>
             <div className="mb-4">
-                <label htmlFor="address" className="block text-gray-700 font-bold">
+                <label htmlFor="address" className="block text-gray-700 font-bold dark:text-white">
                     <HiOutlineLocationMarker className="inline-block mr-2 mb-1 text-lg" />
                     Address
                 </label>
@@ -164,7 +164,7 @@ const {
                     {...register("address", {required: true})}
                     rows="3"
                     placeholder="Enter Your Address"
-                    className="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring focus:ring focus:border-blue-300">
+                    className="dark:placeholder-black w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring focus:ring focus:border-blue-300 dark:text-black">
                 </textarea>
             </div>
           </div>
