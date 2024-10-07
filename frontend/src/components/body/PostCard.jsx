@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BiComment, BiLike, BiSolidLike } from "react-icons/bi";
+// import { BiComment, BiLike, BiSolidLike } from "react-icons/bi";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import "./PostCard.css"; // Import the CSS file
 import pic from "../../assets/userprofile.png";
@@ -181,9 +181,11 @@ const PostCard = () => {
       <div className="post-card-footer" >
         <p className="post-card-likes"    onClick={handleLike}>
           {likes.includes(userId) ? (
-            <BiSolidLike size={20} color="blue" />
+            null
+            // <BiSolidLike size={20} color="blue" />
           ) : (
-            <BiLike size={20} />
+            null
+            // <BiLike size={20} />
           )}
           {likes.length } Likes
         </p>
@@ -191,7 +193,7 @@ const PostCard = () => {
           className="post-card-comments"
           onClick={() => setShowComments(!showComments)}
         >
-          <BiComment size={20} />
+          {/* <BiComment size={20} /> */}
           {comments.length} Comments
         </p>
         <div
