@@ -137,7 +137,7 @@ const PostCard = () => {
   };
 
   return (
-    <div className="post-card">
+    <div className="post-card" style={{marginLeft:'25%',marginRight:'25%'}}>
       <div className="post-card-header">
         <img
           src={hardCodedPost.userId.profileUrl}
@@ -178,14 +178,14 @@ const PostCard = () => {
           />
         )}
       </div>
-      <div className="post-card-footer">
-        <p className="post-card-likes" onClick={handleLike}>
+      <div className="post-card-footer" >
+        <p className="post-card-likes"    onClick={handleLike}>
           {likes.includes(userId) ? (
             <BiSolidLike size={20} color="blue" />
           ) : (
             <BiLike size={20} />
           )}
-          {likes.length} Likes
+          {likes.length } Likes
         </p>
         <p
           className="post-card-comments"
@@ -198,8 +198,7 @@ const PostCard = () => {
           className="post-card-delete"
           onClick={handleDeletePost}
         >
-          <MdOutlineDeleteOutline size={20} />
-          <span>Delete</span>
+        
         </div>
       </div>
 
@@ -211,6 +210,7 @@ const PostCard = () => {
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
               placeholder="Add a comment..."
+              width="50%"
               className="post-card-comment-input"
               required
             />
@@ -239,7 +239,7 @@ const PostCard = () => {
               <p className="post-card-comment-text" style={{paddingLeft:'5px'}}>{comment.comment}</p>
               <div className="post-card-comment-actions" style={{paddingLeft:'5px'}}>
                 <form onSubmit={(e) => handleReplySubmit(e, comment._id)}>
-                  <input type="text" name="replyInput" placeholder="Reply..." required />
+                  <input type="text" name="replyInput" style={{paddingLeft:'5px',paddingTop:'2px',paddingBottom:'2px'}} placeholder="Reply..." required />
                   <button type="submit" className="post-card-reply-button">Reply</button>
                 </form>
                 {/* Show delete button only if the logged-in user is the comment author */}
