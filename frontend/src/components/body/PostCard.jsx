@@ -73,7 +73,7 @@ const PostCard = () => {
       const newCommentData = {
         _id: `comment${comments.length + 1}`,
         userId: {
-          _id: userId,
+          _id: userId,   
           firstName: "John",
           lastName: "Doe",
           profileUrl: "https://via.placeholder.com/150",
