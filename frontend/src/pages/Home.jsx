@@ -1,4 +1,6 @@
 import React from 'react'
+import imag from '../assets/home/a.jpeg'
+import imbg from '../assets/home/b.jpg'
 
 export const Home = () => {
   return (
@@ -68,8 +70,8 @@ export const Home = () => {
 
         {/* Right Column - Design Placeholder */}
         <div className="flex-1 flex justify-center items-center mt-10 md:mt-0">
-          <div className="w-64 h-64 bg-gray-200 dark:bg-gray-700 rounded-md flex justify-center items-center shadow-lg">
-            <span className="text-lg font-semibold text-gray-500 dark:text-gray-400">Design</span>
+          <div className="w-96 h-96 bg-gray-200 dark:bg-gray-700 rounded-md flex justify-center items-center shadow-lg">
+            <img src={imag} alt="Design Image" className="w-full h-full object-cover rounded-md" />
           </div>
         </div>
       </main>
@@ -115,9 +117,9 @@ export const InfoSection = () => {
       {/* Left: Image Placeholder */}
       <div className="w-full md:w-1/2 flex justify-center md:justify-center mb-8 md:mb-0">
         <img
-          src="https://via.placeholder.com/300" // Replace with your image URL or component
+          src={imbg} // Replace with your image URL or component
           alt="3D Spring Design"
-          className="w-64 h-64 object-contain rounded-md"
+          className="w-96 h-96 object-contain rounded-md"
         />
       </div>
 
@@ -209,9 +211,8 @@ const InfosysStats = () => {
       {stats.map((stat, index) => (
         <div
           key={index}
-          className={`flex flex-col md:flex-row items-center justify-center space-x-2 pt-8 pb-8 ${
-            index !== 0 ? 'md:border-l-4 md:border-gray-300 md:pl-6' : ''
-          }`}
+          className={`flex flex-col md:flex-row items-center justify-center space-x-2 pt-8 pb-8 ${index !== 0 ? 'md:border-l-4 md:border-gray-300 md:pl-6' : ''
+            }`}
         >
           <h2 className="text-5xl font-bold">{stat.value}</h2>
           {stat.star && <span className="text-yellow-500 text-2xl">★</span>}
