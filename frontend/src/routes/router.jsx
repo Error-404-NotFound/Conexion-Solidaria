@@ -3,6 +3,8 @@ import { MainLayout } from "../layout/MainLayout";
 import { Home } from "../pages/Home";
 import { About } from "../pages/About";
 import { Contact } from "../pages/Contact";
+import Posts from "../pages/Posts";
+// import PostCard from "../components/body/PostCard";
 
 export const router = createBrowserRouter([
     {
@@ -20,6 +22,10 @@ export const router = createBrowserRouter([
             {
                 path: "/contact",
                 element: <Contact/>,
+            },
+            {
+                path: "/posts",
+                element: <Posts />,
             }
         ],
     },
