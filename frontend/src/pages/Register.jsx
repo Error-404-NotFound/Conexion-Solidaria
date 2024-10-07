@@ -56,8 +56,8 @@ const {
 
 
   return (
-    <div className="flex justify-center items-center pt-14 bg-gray-100 mt-10">
-      <div className="max-w-md p-8 rounded-lg shadow-md">
+    <div className="flex justify-center items-center pt-14 min-h-screen bg-gray-100 mt-10">
+      <div className="bg-white p-8 rounded-lg shadow-md">
         <h2 className="text-3xl font-bold text-center mb-6">Please Register</h2>
 
         {/* form data */}
