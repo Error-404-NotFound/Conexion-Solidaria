@@ -201,7 +201,7 @@ const InfosysStats = () => {
   ];
 
   return (
-    <div className="flex flex-col md:flex-row justify-around items-center text-center py-10 bg-white space-y-4 md:space-y-0">
+    <div className="flex flex-col md:flex-row justify-around items-center text-center py-10 bg-white space-y-4 md:space-y-0 dark:bg-black dark:text-white">
       {/* Title */}
       <div className="mb-6 md:mb-0">
         <p className="text-gray-500 text-lg font-semibold">Infosys by the numbers</p>
