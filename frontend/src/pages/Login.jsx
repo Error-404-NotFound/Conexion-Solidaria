@@ -91,21 +91,21 @@ const Login = () => {
     return (
         <div className="flex justify-center items-center pt-14 min-h-screen bg-gray-100 mt-10 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans">
             <div className="bg-white p-8 rounded-lg shadow-md dark:bg-black dark:text-white">
-                <h2 className="text-3xl font-bold text-center mb-6">Please Register</h2>
+                <h2 className="text-3xl font-bold text-center mb-6">Please Login  </h2>
                 <form className="space-y-6" onSubmit={handleSubmit}>
                     {/* Email Field */}
-                    <div className="flex items-center border-b border-gray-300 py-2 dark:text-white">
-                        <AiOutlineMail className="inline-block mr-2 mb-1 text-lg" />
+                    <div className="flex items-center border-gray-300 py-2 dark:text-white">
+                        <AiOutlineUser className="inline-block mr-2 mb-1 text-lg" />
                         <input
-                            type="username"
+                            type="text"
                             placeholder="Enter your username"
                             className="dark:placeholder-black w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring focus:ring focus:border-blue-300 dark:text-black"
                         />
                     </div>
 
                     {/* Password Field */}
-                    <div className="flex items-center border-b border-gray-300 py-2 dark:text-white">
-                        <AiOutlineLock className="text-gray-500 mr-3" />
+                    <div className="flex items-center border-gray-300 py-2 dark:text-white">
+                        <AiOutlineLock className="inline-block mr-2 mb-1 text-lg" />
                         <input
                             type="password"
                             placeholder="Enter your password"

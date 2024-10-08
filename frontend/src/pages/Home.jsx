@@ -51,7 +51,7 @@ export const Home = () => {
 
             {/* Call to Action Button */}
             <button className="bg-black text-white dark:bg-gray-700 dark:text-gray-100 py-3 px-6 rounded-md flex items-center space-x-2 hover:bg-gray-800 dark:hover:bg-gray-600 transition duration-200">
-              <span>Take Test</span>
+              <span>Donate</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -137,7 +137,7 @@ export const InfoSection = () => {
 
         {/* Button */}
         <button className="mt-8 bg-white dark:bg-gray-800 text-black dark:text-white border-2 border-black dark:border-white rounded-full py-2 px-6 flex items-center hover:bg-gray-100 dark:hover:bg-gray-700 transition">
-          <span className="mr-2">Our Services</span>
+          <span className="mr-2">Explore Features</span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -164,7 +164,7 @@ export const WhyUS = () => {
 
         {/* Button */}
         <button className="mt-8 bg-white dark:bg-gray-800 text-black dark:text-white border-2 border-black dark:border-white rounded-full py-2 px-6 flex items-center hover:bg-gray-100 dark:hover:bg-gray-700 transition">
-          <span className="mr-2">Let's Talk</span>
+          <span className="mr-2"> Get Involved</span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
