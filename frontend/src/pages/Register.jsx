@@ -259,6 +259,9 @@ const Register = () => {
     const address = ev.target[7].value;
     // const url = isLoginOrRegister === 'register' ? '/register' : '/login';
     const { data } = await axios.post("http://localhost:3000/register", { username: username, password: password, email: email, phone: phone, url: url, gender: gender, address: address });
+    if(data.redirectUrl) {
+      navigate(data.redirectUrl);
+    }
     // setLoggedInUsername(username);
     // setId(data.id);
   }
@@ -278,11 +281,11 @@ const Register = () => {
             <div className="mb-4">
               <label htmlFor="name" className="block text-gray-700 font-bold dark:text-white">
                 <AiOutlineUser className="inline-block mr-2 mb-1 text-lg" />
-                Name
+                Username
               </label>
               <input
                 type="text"
-                placeholder="Enter Your Name"
+                placeholder="Enter Your Username"
                 {...register("name", { required: true })}
                 className="dark:placeholder-black w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring focus:ring focus:border-blue-300 dark:text-black"
               />
