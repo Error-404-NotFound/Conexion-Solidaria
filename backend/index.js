@@ -4,11 +4,40 @@ const cors = require('cors');
 require('dotenv').config()
 const jwt = require('jsonwebtoken');
 const port = process.env.PORT || 3000;
-console.log("DB User name ", process.env.DB_USER);
+// console.log("DB User name ", process.env.DB_USER);
+// const cors = require('cors');
+// const express = require("express");
+// const app = express();
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+// var GoogleStrategy = require('passport-google-oauth2').Strategy;
+const session = require("express-session");
+const cookie = require("express-session/session/cookie");
+const User = require('./models/user');// model
+const mongoose = require('mongoose');
+const path = require('path');
+const flash = require('connect-flash');
+
+
+mongoose.connect(process.env.MONGODB_SECRET, {});
 
 // middleware
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:5173', // Replace with your front-end URL
+    credentials: true // Allow credentials (cookies, authorization headers)
+}));
 app.use(express.json());
+
+const sessionConfig = {
+    secret: `${process.env.SESSION_SECRET}`,
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: true,
+        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+        maxAge: 1000 * 60 * 60 * 24 * 7
+    }
+};
 
 // verify tokens
 const verifyJWT = (req,res,next) => {
@@ -27,17 +56,40 @@ const verifyJWT = (req,res,next) => {
 }
 // mongodb connection
 
-const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@conexion-solidaria.fztg5.mongodb.net/?retryWrites=true&w=majority&appName=conexion-solidaria`;
-
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  }
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "connection error:"));
+db.once("open", () => {
+    console.log("Database connected");
 });
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'))
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+app.use(flash());
+app.use(session(sessionConfig));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+
+// const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+// // const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@conexion-solidaria.fztg5.mongodb.net/?retryWrites=true&w=majority&appName=conexion-solidaria`;
+
+// // Create a MongoClient with a MongoClientOptions object to set the Stable API version
+// const client = new MongoClient(uri, {
+//   serverApi: {
+//     version: ServerApiVersion.v1,
+//     strict: true,
+//     deprecationErrors: true,
+//   }
+// });
 
 async function run() {
   try {
@@ -185,8 +237,28 @@ async function run() {
     // await client.close();
   }
 }
-run().catch(console.dir);
+// run().catch(console.dir);
 
+
+app.post('/register', async (req, res) => {
+    // console.log(req.body+"\n");
+    try {
+        const { username, password, phone, url, gender, address } = req.body;
+        // console.log(username + " " + email + " " + password + " ha");
+        console.log(username, password, phone, url, gender, address);
+        const user = new User({ username, phone, url, gender, address });
+        const registeredUser = await User.register(user, password);
+        req.login(registeredUser, err => {
+            // if (err) return next(err);
+            // req.flash('success', 'Welcome to Yelp Camp!');
+            // res.redirect('/login');
+        });
+    } catch (e) {
+        //     req.flash('error', e.message);
+        console.log(e.message);
+        //     res.redirect('register');
+    }
+});
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
