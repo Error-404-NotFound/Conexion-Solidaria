@@ -239,6 +239,13 @@ async function run() {
 }
 // run().catch(console.dir);
 
+app.post('/login', passport.authenticate('local', { failureFlash: true }), (req, res) => {
+    req.flash('success', 'welcome back!');
+    // const redirectUrl = '/';
+    delete req.session.returnTo;
+    // res.redirect("http://localhost:5173/");
+    return res.status(200).send({message: 'User registered successfully', redirectUrl: '/posts'});
+});
 
 app.post('/register', async (req, res) => {
     // console.log(req.body+"\n");
@@ -252,6 +259,7 @@ app.post('/register', async (req, res) => {
             // if (err) return next(err);
             // req.flash('success', 'Welcome to Yelp Camp!');
             // res.redirect('/login');
+            return res.status(200).send({message: 'User registered successfully', redirectUrl: '/posts'});
         });
     } catch (e) {
         //     req.flash('error', e.message);
