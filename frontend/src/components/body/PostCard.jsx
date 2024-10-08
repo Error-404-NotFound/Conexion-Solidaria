@@ -1,37 +1,6 @@
 import React, { useState } from "react";
-import "./PostCard.css"; // Import the CSS file
-import pic from "../../assets/userprofile.png";
-import postimg from "../../assets/forestfire.jpg";
-
-const hardCodedPost = {
-  userId: {
-    _id: "user123",
-    firstName: "John",
-    lastName: "Doe",
-    profileUrl: pic,
-    location: "New York, USA",
-  },
-  createdAt: "2024-10-06T12:00:00Z",
-  description:
-    "This is a hardcoded post description. It can be a little longer than expected to demonstrate text truncation in the UI. Let's see how the text gets displayed in the post card.",
-  image: postimg,
-  likes: ["user123", "user456"],
-  comments: [
-    {
-      _id: "comment1",
-      userId: {
-        _id: "user456",
-        firstName: "Jane",
-        lastName: "Smith",
-        profileUrl: "https://via.placeholder.com/150",
-      },
-      createdAt: "2024-10-06T13:00:00Z",
-      comment: "Great post!",
-      likes: [],
-      replies: [],
-    },
-  ],
-};
+import "./PostCard.css";
+import aniket from "../../assets/aniket.png";
 
 const timeAgo = (date) => {
   const seconds = Math.floor((new Date() - new Date(date)) / 1000);
@@ -48,13 +17,13 @@ const timeAgo = (date) => {
   return `${seconds} seconds ago`;
 };
 
-const PostCard = () => {
-  const userId = "user123"; // This should be replaced with the actual logged-in user's ID
+const PostCard = ({ post }) => {
+  const userId = "user100"; // This should be replaced with the actual logged-in user's ID
   const [showAll, setShowAll] = useState(false);
   const [showComments, setShowComments] = useState(false);
-  const [likes, setLikes] = useState(hardCodedPost.likes);
+  const [likes, setLikes] = useState(post.likes);
   const [newComment, setNewComment] = useState("");
-  const [comments, setComments] = useState(hardCodedPost.comments);
+  const [comments, setComments] = useState(post.comments);
 
   const handleLike = () => {
     const currentUserId = userId; // This should be replaced with the actual logged-in user's ID
@@ -71,10 +40,10 @@ const PostCard = () => {
       const newCommentData = {
         _id: `comment${comments.length + 1}`,
         userId: {
-          _id: userId,   
-          firstName: "John",
-          lastName: "Doe",
-          profileUrl: "https://via.placeholder.com/150",
+          _id: userId,
+          firstName: "Aniket",
+          lastName: "Johri",
+          profileUrl: aniket,
         },
         createdAt: new Date().toISOString(),
         comment: newComment,
@@ -115,9 +84,9 @@ const PostCard = () => {
       _id: `reply${Math.random()}`, // Using random ID for simplicity
       userId: {
         _id: userId,
-        firstName: "John",
-        lastName: "Doe",
-        profileUrl: "https://via.placeholder.com/150",
+        firstName: "Aniket",
+        lastName: "Johri",
+        profileUrl: aniket,
       },
       createdAt: new Date().toISOString(),
       comment: replyInput,
@@ -135,30 +104,29 @@ const PostCard = () => {
   };
 
   return (
-    <div className="post-card" style={{marginLeft:'25%',marginRight:'25%'}}>
+    <div className="post-card" >
       <div className="post-card-header">
         <img
-          src={hardCodedPost.userId.profileUrl}
-          alt={hardCodedPost.userId.firstName}
+          src={post.userId.profileUrl}
+          alt={`${post.userId.firstName} ${post.userId.lastName}`}
           className="post-card-user-image"
         />
         <div className="post-card-user-info">
-          <p className="post-card-user-name">{`${hardCodedPost.userId.firstName} ${hardCodedPost.userId.lastName}`}</p>
-          <span className="post-card-location">{hardCodedPost.userId.location}</span>
+          <p className="post-card-user-name">{`${post.userId.firstName} ${post.userId.lastName}`}</p>
+            <p className="post-card-location">{post.location}</p>
         </div>
-        <span className="post-card-timestamp">
-          {new Date(hardCodedPost.createdAt).toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
-        </span>
-      </div>
+        <span className="post-card-timestamp">{timeAgo(post.createdAt)}</span>
+        </div>
+        {/* <button className="delete-post-button" onClick={handleDeletePost}>
+          Delete
+        </button> */}
+      
       <div className="post-card-body">
-        <p>
-          {showAll
-            ? hardCodedPost.description
-            : `${hardCodedPost.description.slice(0, 100)}...`}
-          {hardCodedPost.description.length > 100 && (
+        <div className="post-card-description">
+        {showAll
+            ? post.description
+            : `${post.description.slice(0, 100)}...`}
+          {post.description.length > 100 && (
             <span
               className="post-card-toggle-text"
               onClick={() => setShowAll(!showAll)}
@@ -166,18 +134,14 @@ const PostCard = () => {
               {showAll ? " Show Less" : " Show More"}
             </span>
           )}
-        </p>
-        {hardCodedPost.image && (
-          <img
-            src={hardCodedPost.image}
-            alt="post"
-            className="post-card-image"
-            style={{width:'90%', justifyContent:'center',marginLeft:'5%'}}
-          />
+        </div>
+        
+        {post.image && (
+          <img src={post.image} alt="Post" className="post-card-image" />
         )}
       </div>
-      <div className="post-card-footer" >
-        <p className="post-card-likes"    onClick={handleLike}>
+      <div className="post-card-footer">
+      <p className="post-card-likes"    onClick={handleLike}>
           {likes.includes(userId) ? (
             <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="#0000ff" d="M23 10a2 2 0 0 0-2-2h-6.32l.96-4.57c.02-.1.03-.21.03-.32c0-.41-.17-.79-.44-1.06L14.17 1L7.59 7.58C7.22 7.95 7 8.45 7 9v10a2 2 0 0 0 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73zM1 21h4V9H1z"/></svg>
           ) : (
@@ -199,9 +163,8 @@ const PostCard = () => {
         
         </div>
       </div>
-
       {showComments && (
-        <div className="post-card-comments-section">
+          <div className="post-card-comments-section">
           <form onSubmit={handleCommentSubmit} className="post-card-comment-form">
             <input
               type="text"
