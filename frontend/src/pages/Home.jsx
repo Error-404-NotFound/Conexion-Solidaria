@@ -37,17 +37,16 @@ export const Home = () => {
         <div className="flex-1 space-y-8">
           {/* Placeholder Text */}
           <div className="text-gray-400 dark:text-gray-500">
-            lorem ipsum lorem ipsum
+            Welcome to Conexion-Solidaria
           </div>
 
           {/* Section Heading and Description */}
           <div>
             <h2 className="text-gray-500 dark:text-gray-400 uppercase text-sm font-semibold mb-2 mt-60">
-              Empowering Skills, Shaping Futures
+              Connecting Those in Need with Those Who Can Help
             </h2>
             <p className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-6">
-              We help you bridge skill gaps and unlock new career opportunities
-              with personalized learning and job recommendations.
+              At Conexion-Solidaria, we believe that everyone has the ability to make a difference. Our platform allows users to post requests for help or offer assistance to those in need. Whether it’s food, clothing, shelter, or simply companionship, Conexion-Solidaria bridges the gap between those seeking help and those willing to provide it. Join us in creating a community where compassion thrives.
             </p>
 
             {/* Call to Action Button */}
@@ -112,7 +111,7 @@ export const Home = () => {
 
       {/* Infosys Stats */}
       <InfosysStats />
-
+     
     </div>
   )
 }
@@ -133,9 +132,7 @@ export const InfoSection = () => {
       {/* Right: Text Content */}
       <div className="w-full md:w-1/2">
         <h2 className="text-2xl md:text-4xl font-bold mb-4 leading-tight">
-          InfosysDevOps is a team of professionals with over <span className="text-gray-400 dark:text-gray-500">8+ years</span> demonstrated competence in IT,
-          <span className="text-gray-400 dark:text-gray-500"> focuses</span> on delivering integrated, reliable, resilient and cost-effective solutions and
-          <span className="text-gray-400 dark:text-gray-500"> regards</span> it as a privilege to ensure 100% customer satisfaction.
+        At Conexion-Solidaria, we believe that every act of kindness matters. Our platform focuses on <span className="text-gray-400 dark:text-gray-500">bringing communities together</span> and offering a space where <span className="text-gray-400 dark:text-gray-500">help can be provided locally</span>. Whether you’re an individual or an organization, you can <span className="text-gray-400 dark:text-gray-500">make a real difference</span> by connecting with those around you.
         </h2>
 
         {/* Button */}
@@ -162,9 +159,7 @@ export const WhyUS = () => {
       {/* Left: Text Content */}
       <div className="w-full md:w-1/2">
         <p className="text-base md:text-base font-bold mb-4 leading-tight pr-40">
-          InfosysDevOps is a team of professionals with over <span className="text-gray-400 dark:text-gray-500">8+ years</span> demonstrated competence in IT,
-          <span className="text-gray-400 dark:text-gray-500"> focuses</span> on delivering integrated, reliable, resilient and cost-effective solutions and
-          <span className="text-gray-400 dark:text-gray-500"> regards</span> it as a privilege to ensure 100% customer satisfaction.
+        The platform is designed to be <span className="text-gray-400 dark:text-gray-500">user-friendly</span>, allowing anyone to <span className="text-gray-400 dark:text-gray-500">post help requests</span> or offer assistance in a few easy steps. With <span className="text-gray-400 dark:text-gray-500">categorized tags</span> like food, clothing, and shelter, users can easily find relevant posts based on their interests and location, creating a more <span className="text-gray-400 dark:text-gray-500">targeted approach</span> to community help.
         </p>
 
         {/* Button */}
@@ -185,7 +180,8 @@ export const WhyUS = () => {
       {/* Right : Why Us Header */}
       <div className="w-full md:w-1/2">
         <p className="text-xl md:text-base font-bold mb-4 leading-tight">
-          YOUR PARTNER
+          YOUR TRUSTED COMMUNITY
+
         </p>
 
         <p className="text-8xl md:text-8xl font-bold mb-4 leading-tight">
@@ -244,11 +240,11 @@ const StatsItem = ({ value, label, isVisible, index }) => {
 
 const InfosysStats = () => {
   const stats = [
-    { value: '43+', label: 'Years in Market' },
-    { value: '80+', label: 'Certified Experts In Team' },
-    { value: '525+', label: 'Successfully Completed Projects' },
-    { value: '4.9', label: 'Rating on Clutch', star: true },
-    { value: '5.0', label: 'Rating on Clutch', star: true },
+    { value: '10,000+', label: 'People Reached' },
+    { value: '1500+', label: 'Volunteers Joined' },
+    { value: '3000+', label: 'Successfull Requests Completed' },
+    { value: '4.8', label: 'Average User Rating', star: true },
+    { value: '50+', label: 'Community Partnerships', star: true },
   ];
 
   // Using Intersection Observer
@@ -258,7 +254,7 @@ const InfosysStats = () => {
     <div ref={ref} className="flex flex-col md:flex-row justify-around items-center text-center py-10 bg-white dark:bg-gray-900 space-y-4 md:space-y-0">
       {/* Title */}
       <div className="mb-6 md:mb-0">
-        <p className="text-gray-500 dark:text-gray-400 text-lg font-semibold">Infosys by <br></br> numbers</p>
+        <p className="text-gray-500 dark:text-gray-400 text-lg font-semibold">Conexion-Solidaria by <br></br> numbers</p>
       </div>
 
       {/* Stats */}
@@ -293,8 +289,8 @@ const TextScroll = () => {
   return (
     <div className="overflow-hidden whitespace-nowrap">
       <div ref={textRef} className="scrolling-text text-9xl font-bold inline-block">
-        <span className="text-black dark:text-white">At Every Turn Innovation — </span>
-        <span className="text-gray-300 dark:text-gray-600">At Every Turn Innovation — </span>
+        <span className="text-black dark:text-white">Uniting communities through compassion, connecting those in need with caring hearts — </span>
+        <span className="text-gray-300 dark:text-gray-600">Transforming lives one act of kindness at a time — </span>
       </div>
     </div>
   );
