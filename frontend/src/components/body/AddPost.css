@@ -1,13 +1,14 @@
 .add-post-container {
-  
-  max-width: 600px;
-  margin: 0 auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+  margin-left: 3%;
   padding: 20px;
   border: 1px solid #ddd;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   background-color: #fff;
-  max-width: 35%;
+  /* max-width: 35%; */
 }
 
 .add-post-heading{

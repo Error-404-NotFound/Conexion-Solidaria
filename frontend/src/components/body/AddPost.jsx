@@ -1,16 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import './AddPost.css'; // Import the CSS file
+import aniket from "../../assets/aniket.png";
 
-const AddPost = () => {
+const AddPost = ({ addNewPost }) => {
   const [description, setDescription] = useState('');
   const [image, setImage] = useState(null);
   const [tag, setTag] = useState('cloth');
   const [location, setLocation] = useState('');
   const [additionalInfo, setAdditionalInfo] = useState('');
 
+  const imageInputRef = useRef(null); // Create a reference for the image input
+
   const handleImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
-      setImage(e.target.files[0]);
+      setImage(URL.createObjectURL(e.target.files[0]));
     }
   };
 
@@ -18,14 +21,23 @@ const AddPost = () => {
     e.preventDefault();
     const timestamp = new Date().toISOString();
     const newPost = {
+      userId: {
+        _id: "user100",
+        firstName: "Aniket",
+        lastName: "Johri",
+        profileUrl: aniket,
+        location: "Tirupati",
+      },
+      createdAt: timestamp,
       description,
       image,
       tag,
       location,
       additionalInfo,
-      createdAt: timestamp,
+      likes: [],
+      comments: [],
     };
-    console.log('New Post:', newPost);
+    addNewPost(newPost);
 
     // Clear the form fields
     setDescription('');
@@ -33,14 +45,19 @@ const AddPost = () => {
     setTag('cloth');
     setLocation('');
     setAdditionalInfo('');
+
+    // Clear the image input field using the ref
+    if (imageInputRef.current) {
+      imageInputRef.current.value = '';
+    }
   };
 
   return (
     <div className="add-post-container bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans transition-colors duration-300">
       <div className="add-post-heading">
-      <h2>Add New Post</h2>
+        <h2>Add New Post</h2>
       </div>
-      
+
       <form onSubmit={handleSubmit} className="add-post-form">
         <div className="form-group">
           <label htmlFor="description">Post Description:</label>
@@ -60,6 +77,7 @@ const AddPost = () => {
             id="image"
             accept="image/*"
             onChange={handleImageChange}
+            ref={imageInputRef} // Attach the ref here
             required
             className="dark:text-white"
           />
@@ -88,16 +106,6 @@ const AddPost = () => {
             value={location}
             onChange={(e) => setLocation(e.target.value)}
             required
-            className="dark:text-black"
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="additionalInfo">Additional Information:</label>
-          <textarea
-            id="additionalInfo"
-            value={additionalInfo}
-            onChange={(e) => setAdditionalInfo(e.target.value)}
             className="dark:text-black"
           />
         </div>
