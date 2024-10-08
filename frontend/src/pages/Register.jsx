@@ -387,13 +387,6 @@ const Register = () => {
           <div className="text-center">
             <button type="submit" className="bg-secondary hover:bg-red-500 text-white py-2 px-4 rounded-md">Register</button>
 
-            {
-              errors && (
-                <div className="text-red-500 text-sm w-full mt-1">
-                  <p>Password doesn't match!</p>
-                </div>
-              )
-            }
           </div>
 
         </form>

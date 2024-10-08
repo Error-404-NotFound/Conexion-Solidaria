@@ -1,23 +1,30 @@
 @keyframes scrollFirst {
-    0% {
-      transform: translateX(10%);
-    }
-    100% {
-      transform: translateX(-100%);
-    }
+  0% {
+    transform: translateX(100%); /* Start fully outside the right edge */
   }
-  
-  @keyframes scrollRest {
-    0% {
-      transform: translateX(100%);
-    }
-    100% {
-      transform: translateX(-100%);
-    }
+  100% {
+    transform: translateX(-100%); /* End fully outside the left edge */
   }
-  
-  .scrolling-text {
-    display: inline-block;
-    animation: scrollFirst 13s linear infinite; /* First time animation */
+}
+
+@keyframes scrollRest {
+  0% {
+    transform: translateX(100%); /* Start fully outside the right edge */
   }
-  
+  100% {
+    transform: translateX(-100%); /* End fully outside the left edge */
+  }
+}
+
+.scrolling-text {
+  display: inline-block;
+  animation: scrollFirst 20s linear infinite; /* Slower scroll for smooth animation */
+  animation-delay: 0s; /* No delay, starts immediately */
+}
+
+/* Optional: To create a smooth transition between scrolls */
+.scrolling-text-rest {
+  display: inline-block;
+  animation: scrollRest 35s linear infinite;
+  animation-delay: 1s; /* Adjust delay if you need subsequent text */
+}
