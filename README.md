@@ -39,3 +39,5 @@ npm i
 npm run dev
 ```
 
+Note: If you try to run backend you will have to set environment variables.
+
