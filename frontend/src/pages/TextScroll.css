@@ -1,0 +1,23 @@
+@keyframes scrollFirst {
+    0% {
+      transform: translateX(10%);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+  
+  @keyframes scrollRest {
+    0% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+  
+  .scrolling-text {
+    display: inline-block;
+    animation: scrollFirst 13s linear infinite; /* First time animation */
+  }
+  
