@@ -1,4 +1,9 @@
-import React from 'react'
+import imag from '../assets/home/a.jpeg'
+import imbg from '../assets/home/b.jpg'
+import React, { useState, useEffect, useRef } from "react";
+import { motion } from 'framer-motion';
+import { useInView } from 'react-intersection-observer';
+import "./TextScroll.css"; // Import custom CSS for animation
 
 export const Home = () => {
   return (
@@ -68,8 +73,8 @@ export const Home = () => {
 
         {/* Right Column - Design Placeholder */}
         <div className="flex-1 flex justify-center items-center mt-10 md:mt-0">
-          <div className="w-64 h-64 bg-gray-200 dark:bg-gray-700 rounded-md flex justify-center items-center shadow-lg">
-            <span className="text-lg font-semibold text-gray-500 dark:text-gray-400">Design</span>
+          <div className="w-96 h-96 bg-gray-200 dark:bg-gray-700 rounded-md flex justify-center items-center shadow-lg">
+            <img src={imag} alt="Design Image" className="w-full h-full object-cover rounded-md" />
           </div>
         </div>
       </main>
@@ -96,6 +101,9 @@ export const Home = () => {
       </footer>
       */}
 
+      {/* Text Scroll Animation */}
+      <TextScroll />
+
       {/* Info Section */}
       <InfoSection />
 
@@ -104,6 +112,7 @@ export const Home = () => {
 
       {/* Infosys Stats */}
       <InfosysStats />
+
     </div>
   )
 }
@@ -115,9 +124,9 @@ export const InfoSection = () => {
       {/* Left: Image Placeholder */}
       <div className="w-full md:w-1/2 flex justify-center md:justify-center mb-8 md:mb-0">
         <img
-          src="https://via.placeholder.com/300" // Replace with your image URL or component
+          src={imbg} // Replace with your image URL or component
           alt="3D Spring Design"
-          className="w-64 h-64 object-contain rounded-md"
+          className="w-96 h-96 object-contain rounded-md"
         />
       </div>
 
@@ -189,6 +198,50 @@ export const WhyUS = () => {
   );
 };
 
+
+const StatsItem = ({ value, label, isVisible, index }) => {
+  const [displayValue, setDisplayValue] = useState(0);
+  const duration = 1.5; // total duration in seconds
+
+  useEffect(() => {
+    if (isVisible) {
+      const endValue = label.includes('Rating') ? parseFloat(value) : parseInt(value); // Handle rating separately
+      const totalFrames = 60 * duration; // Total frames for the duration at 60fps
+      const increment = endValue / totalFrames; // Common increment for all stats
+
+      let currentValue = 0;
+      let frameCount = 0;
+
+      const incrementValue = () => {
+        if (frameCount < totalFrames) {
+          frameCount++;
+          currentValue += increment;
+          setDisplayValue(label.includes('Rating') ? parseFloat(currentValue.toFixed(2)) : Math.floor(currentValue)); // Round down for non-ratings
+          requestAnimationFrame(incrementValue); // Smooth updates
+        } else {
+          setDisplayValue(endValue); // Ensure we set the final value
+        }
+      };
+
+      incrementValue();
+    }
+  }, [isVisible, value, label]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={isVisible ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.5, delay: index * 0.2 }}
+      className={`flex flex-col md:flex-col items-center justify-center space-x-2 pt-8 pb-8 ${index !== 0 ? 'md:border-l-4 md:border-gray-300 dark:border-gray-700 md:pl-6' : ''}`}
+    >
+      <h2 className="text-5xl font-bold text-gray-900 dark:text-white">{label.includes('Rating') ? displayValue.toFixed(2) : displayValue + "+"}
+        {label.includes('Rating') && <span className="text-yellow-500 text-2xl justify-center">  ★</span>}</h2>
+      <p className="text-gray-500 dark:text-gray-400 text-lg">{label}</p>
+    </motion.div>
+  );
+};
+
+
 const InfosysStats = () => {
   const stats = [
     { value: '43+', label: 'Years in Market' },
@@ -198,26 +251,51 @@ const InfosysStats = () => {
     { value: '5.0', label: 'Rating on Clutch', star: true },
   ];
 
+  // Using Intersection Observer
+  const { ref, inView } = useInView({ threshold: 0.1 }); // Trigger when 10% is visible
+
   return (
-    <div className="flex flex-col md:flex-row justify-around items-center text-center py-10 bg-white space-y-4 md:space-y-0">
+    <div ref={ref} className="flex flex-col md:flex-row justify-around items-center text-center py-10 bg-white dark:bg-gray-900 space-y-4 md:space-y-0">
       {/* Title */}
       <div className="mb-6 md:mb-0">
-        <p className="text-gray-500 text-lg font-semibold">Infosys by the numbers</p>
+        <p className="text-gray-500 dark:text-gray-400 text-lg font-semibold">Infosys by <br></br> numbers</p>
       </div>
 
       {/* Stats */}
       {stats.map((stat, index) => (
-        <div
-          key={index}
-          className={`flex flex-col md:flex-row items-center justify-center space-x-2 pt-8 pb-8 ${
-            index !== 0 ? 'md:border-l-4 md:border-gray-300 md:pl-6' : ''
-          }`}
-        >
-          <h2 className="text-5xl font-bold">{stat.value}</h2>
-          {stat.star && <span className="text-yellow-500 text-2xl">★</span>}
-          <p className="text-gray-500 text-lg">{stat.label}</p>
-        </div>
+        <StatsItem key={index} value={stat.value} label={stat.label} isVisible={inView} index={index} />
       ))}
+    </div>
+  );
+};
+
+
+const TextScroll = () => {
+  const textRef = useRef(null);
+
+  useEffect(() => {
+    const textElement = textRef.current;
+
+    // Function to change animation after the first iteration
+    const handleAnimationIteration = () => {
+      textElement.style.animation = "scrollRest 27s linear infinite"; // Update for subsequent animations
+    };
+
+    // Add event listener to detect when the animation iteration ends
+    textElement.addEventListener("animationiteration", handleAnimationIteration);
+
+    // Cleanup event listener when component unmounts
+    return () => {
+      textElement.removeEventListener("animationiteration", handleAnimationIteration);
+    };
+  }, []);
+
+  return (
+    <div className="overflow-hidden whitespace-nowrap">
+      <div ref={textRef} className="scrolling-text text-9xl font-bold inline-block">
+        <span className="text-black dark:text-white">At Every Turn Innovation — </span>
+        <span className="text-gray-300 dark:text-gray-600">At Every Turn Innovation — </span>
+      </div>
     </div>
   );
 };

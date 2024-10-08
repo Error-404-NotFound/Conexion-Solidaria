@@ -53,7 +53,7 @@ const AddPost = ({ addNewPost }) => {
   };
 
   return (
-    <div className="add-post-container">
+    <div className="add-post-container bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans transition-colors duration-300">
       <div className="add-post-heading">
         <h2>Add New Post</h2>
       </div>
@@ -66,6 +66,7 @@ const AddPost = ({ addNewPost }) => {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             required
+            className="dark:text-black"
           />
         </div>
 
@@ -78,6 +79,7 @@ const AddPost = ({ addNewPost }) => {
             onChange={handleImageChange}
             ref={imageInputRef} // Attach the ref here
             required
+            className="dark:text-white"
           />
         </div>
 
@@ -88,6 +90,7 @@ const AddPost = ({ addNewPost }) => {
             value={tag}
             onChange={(e) => setTag(e.target.value)}
             required
+            className="dark:text-black"
           >
             <option value="cloth">Cloth</option>
             <option value="shelter">Shelter</option>
@@ -103,6 +106,7 @@ const AddPost = ({ addNewPost }) => {
             value={location}
             onChange={(e) => setLocation(e.target.value)}
             required
+            className="dark:text-black"
           />
         </div>
 
