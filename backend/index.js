@@ -23,7 +23,7 @@ mongoose.connect(process.env.MONGODB_SECRET, {});
 
 // middleware
 app.use(cors({
-    origin: 'http://localhost:5173', // Replace with your front-end URL
+    origin: 'http://localhost:5173' || 'http://localhost:5174', // Replace with your front-end URL
     credentials: true // Allow credentials (cookies, authorization headers)
 }));
 app.use(express.json());
