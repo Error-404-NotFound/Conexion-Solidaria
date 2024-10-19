@@ -3,11 +3,15 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { HiOutlineLocationMarker } from 'react-icons/hi';
+import { useAuth } from '../context/AuthContext';
 import axios from "axios";
 
 const Register = () => {
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState('');
+
+  const { login } = useAuth();
+
   const navigate = useNavigate();
   const {
     register,
@@ -42,6 +46,7 @@ const Register = () => {
       if (responseData.redirectUrl) {
         setMessageType('success');
         setMessage('Registered successfully!');
+        login(responseData);
         setTimeout(() => navigate(responseData.redirectUrl), 1000);
       } else {
         setMessageType('error');

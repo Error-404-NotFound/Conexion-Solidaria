@@ -6,6 +6,7 @@ import { Contact } from "../pages/Contact";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Posts from "../pages/Posts";
+import ProtectedRoute from '../components/body/ProtectedRoute';
 // import PostCard from "../components/body/PostCard";
 
 export const router = createBrowserRouter([
@@ -15,27 +16,31 @@ export const router = createBrowserRouter([
         children: [
             {
                 path: "/",
-                element: <Home/>,
+                element: <Home />,
             },
             {
                 path: "/about",
-                element: <About/>,
+                element: <About />,
             },
             {
                 path: "/contact",
-                element: <Contact/>,
+                element: <Contact />,
             },
             {
                 path: "/login",
-                element: <Login/>,
+                element: <Login />,
             },
             {
                 path: "/register",
-                element: <Register/>,
-            },  
+                element: <Register />,
+            },
             {
                 path: "/posts",
-                element: <Posts />,
+                element: (
+                    <ProtectedRoute>
+                        <Posts />
+                    </ProtectedRoute>
+                ),
             }
         ],
     },

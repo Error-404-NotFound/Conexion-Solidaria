@@ -3,12 +3,13 @@ import { AiOutlineUser, AiOutlineLock } from "react-icons/ai";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
     const [message, setMessage] = useState('');
     const [messageType, setMessageType] = useState('');
 
-    // const { login } = useAuth();
+    const { login } = useAuth();
 
     const navigate = useNavigate();
 
@@ -30,7 +31,7 @@ const Login = () => {
                 setMessageType('success');
                 setMessage('Login successful!');
 
-                // login(responseData);
+                login(responseData);
 
                 setTimeout(() => navigate(responseData.redirectUrl), 1000);
             } else {
