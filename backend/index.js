@@ -11,8 +11,6 @@ const port = process.env.PORT || 3000;
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 // var GoogleStrategy = require('passport-google-oauth2').Strategy;
-// const session = require("express-session");
-// const cookie = require("express-session/session/cookie");
 const bcrypt = require('bcrypt');
 const cookieParser = require('cookie-parser');
 const User = require('./models/user');// model
@@ -48,11 +46,13 @@ const verifyJWT = (req, res, next) => {
         return res.status(401).send({ message: 'Unauthorized' });
     }
 
+    console.log("JWT Token Exists");
     jwt.verify(token, JWT_SECRET, (err, decoded) => {
         if (err) {
             return res.status(403).send({ message: 'Forbidden access' });
         }
         req.user = decoded;  // Attach user info to the request
+        console.log("Going to next");
         next();
     });
 };
@@ -298,62 +298,16 @@ app.post('/login', (req, res, next) => {
     })(req, res, next);
 });
 
-
-// app.post('/register', async (req, res) => {
-//     try {
-//         const { username, password, phone, url, gender, address } = req.body;
-//         console.log(username, password, phone, url, gender, address);
-
-//         // Create a new user
-//         const user = new User({ username, phone, url, gender, address });
-
-//         // Register the user with the hashed password
-//         const registeredUser = await User.register(user, password);
-
-//         // Automatically log the user in after registering
-//         req.login(registeredUser, err => {
-//             if (err) {
-//                 // If there's an error logging in, respond with an error message
-//                 console.log("Error registering :", err);
-//                 return res.status(500).send({ message: 'There was an error while registering. Please try again' });
-//             }
-
-//             // If the user is logged in, generate a JWT token
-//             const token = generateJWT(username);
-
-//             // Set the token as a cookie in the response
-//             res.cookie('jwt', token, {
-//                 httpOnly: true,   // Cannot be accessed from JavaScript (XSS protection)
-//                 secure: process.env.NODE_ENV === 'production',  // Only over HTTPS in production
-//                 sameSite: 'Strict',  // Prevent CSRF attacks
-//                 maxAge: 24 * 60 * 60 * 1000  // Cookie expires in 1 day
-//             });
-
-//             // Respond with a success message and redirect URL
-//             return res.status(200).send({ message: 'User registered successfully', redirectUrl: '/posts' });
-//         });
-//     } catch (e) {
-//         console.log(e.message);
-//         // If an error occurs during registration, respond with the error message
-//         return res.status(400).send({ message: e.message });
-//     }
-// });
-
-
 app.post('/register', async (req, res) => {
     try {
-        const { username, password, phone, url, gender, address } = req.body;
+        const { username, email, password, phone, url, gender, address } = req.body;
 
-        // Create a new user object with the data
-        const newUser = new User({ username, phone, url, gender, address });
+        const newUser = new User({ username, email, phone, url, gender, address });
 
-        // Register the user (passport-local-mongoose automatically hashes the password)
         const registeredUser = await User.register(newUser, password);
 
-        // Generate JWT token after successful registration
         const token = generateJWT(registeredUser.username);
 
-        // Set the JWT token as a cookie (you could also send it in the response)
         res.cookie('jwt', token, {
             httpOnly: true,   // To prevent XSS attacks
             secure: process.env.NODE_ENV === 'production',  // Only use HTTPS in production
@@ -361,19 +315,28 @@ app.post('/register', async (req, res) => {
             maxAge: 24 * 60 * 60 * 1000  // 1 day expiration
         });
 
-        // Send success message and token
         res.status(200).send({ message: 'User registered successfully', token, redirectUrl: '/posts' });
 
     } catch (error) {
-        // Handle any registration errors
         console.error(error);
         res.status(400).send({ message: error.message });
     }
 });
 
+app.post('/logout', (req, res) => {
 
-app.get('/protected', verifyJWT, (req, res) => {
-    // console.log("hah");
+    res.cookie('jwt', '', {
+        httpOnly: true,  // Cannot be accessed from JavaScript (XSS protection)
+        secure: process.env.NODE_ENV === 'production',  // Secure only in production
+        expires: new Date(0),  // Set cookie expiration to the past
+        sameSite: 'Strict'  // CSRF protection
+    });
+
+    res.status(200).send({ message: 'Logged out successfully', redirectUrl: '/login' });
+});
+
+
+app.get('/is-LoggedIn', verifyJWT, (req, res) => {
     res.send({ user: req.user, message: "You are authenticated!" });
 });
 

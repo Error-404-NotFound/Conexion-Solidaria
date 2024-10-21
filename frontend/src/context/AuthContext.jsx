@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
     // Function to check if the user is authenticated
     const checkAuth = async () => {
         try {
-            const response = await axios.get("http://localhost:3000/protected", { withCredentials: true });
+            const response = await axios.get("http://localhost:3000/is-LoggedIn", { withCredentials: true });
             setUser(response.data.user);  // Assuming your backend returns user info on protected endpoints
         } catch (error) {
             console.log("Got Error:" + error);
@@ -32,9 +32,19 @@ export const AuthProvider = ({ children }) => {
         // sessionStorage.setItem('user', JSON.stringify(userData)); // Save to sessionStorage
     };
 
-    const logout = () => {
-        setUser(null);
-        // sessionStorage.removeItem('user'); // Clear from sessionStorage
+    const logout = async () => {
+        try {
+            // Send a request to the backend to log out and clear the cookie
+            const response = await axios.post("http://localhost:3000/logout", {}, { withCredentials: true });
+            if (response.data.message == "Logged out successfully") {
+                setUser(null);
+            }
+            else {
+                console.log("Logout failed:", error);
+            }
+        } catch (error) {
+            console.error("Logout failed:", error);
+        }
     };
 
     return (

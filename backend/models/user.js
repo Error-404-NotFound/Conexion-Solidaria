@@ -12,6 +12,8 @@ const UserSchema = new Schema({
     //     type: String,
     //     unique: true
     // },
+
+    // need to make things required.
     email: {
         type: String,
         unique: true
@@ -20,7 +22,7 @@ const UserSchema = new Schema({
         type: String,
         unique: true
     },
-    url : {
+    url: {
         type: String
     },
     gender: {

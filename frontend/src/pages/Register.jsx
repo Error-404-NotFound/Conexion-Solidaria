@@ -25,12 +25,6 @@ const Register = () => {
 
   const onSubmit = async (data) => {
     // If the passwords do not match, set an error message
-    if (data.password !== data.confirmPassword) {
-      setMessageType('error');
-      setMessage("Passwords do not match");
-      return; // Exit early to prevent sending a request
-    }
-
     try {
       const response = await axios.post("http://localhost:3000/register", {
         username: data.name,
@@ -47,7 +41,7 @@ const Register = () => {
         setMessageType('success');
         setMessage('Registered successfully!');
         login(responseData);
-        setTimeout(() => navigate(responseData.redirectUrl), 1000);
+        setTimeout(() => navigate(responseData.redirectUrl), 500);
       } else {
         setMessageType('error');
         setMessage(responseData.message || 'Registration failed. Please try again.');
@@ -124,12 +118,16 @@ const Register = () => {
               <input
                 type="password"
                 placeholder="Confirm Your Password"
-                {...register("confirmPassword", { required: true })}
+                {...register("confirmPassword", {
+                  required: "Confirm Password is required.",
+                  validate: value => value === password || "Passwords do not match"
+                })}
                 className="dark:placeholder-black w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring focus:border-blue-300 dark:text-black"
               />
               {errors.confirmPassword && (
-                <p className="text-red-500 text-xs italic">Confirm Password is required.</p>
+                <p className="text-red-500 text-xs italic">{errors.confirmPassword.message}</p>
               )}
+
             </div>
           </div>
           <div className="flex items-center gap-5">

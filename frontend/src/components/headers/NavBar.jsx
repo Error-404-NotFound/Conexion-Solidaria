@@ -5,6 +5,7 @@ import { ThemeProvider, THEME_ID } from '@mui/material/styles';
 import { set } from 'react-hook-form';
 import { FaBars } from 'react-icons/fa';
 import { motion } from 'framer-motion';
+import { useAuth } from '../../context/AuthContext';
 
 const navLinks = [
     { name: 'Home', path: '/' },
@@ -33,7 +34,8 @@ export const NavBar = () => {
     const [isFixed, setIsFixed] = React.useState(false);
     const [isDarkMode, setIsDarkMode] = React.useState(false);
     const [navBg, setNavBg] = React.useState('bg-[#15151580]');
-    const [user, setUser] = React.useState(false);
+    // const [user, setUser] = React.useState(false);
+    const { user, logout } = useAuth();
 
     const toggleMobileMenu = () => {
         setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -71,6 +73,7 @@ export const NavBar = () => {
 
     const handleLogout = () => {
         console.log('Logging out');
+        logout();
     }
 
     useEffect(() => {
@@ -171,9 +174,13 @@ export const NavBar = () => {
 
                                 {
                                     user && <li>
-                                        <NavLink onClick={handleLogout}
-                                            className={'font-bold px-3 py-2 bg-secondary text-white rounded-x1'}
-                                        >Logout</NavLink>
+                                        <button
+                                            onClick={handleLogout}
+                                            className="font-bold px-3 py-2 bg-gray-600 text-white rounded-x1"
+                                        >
+                                            Logout
+                                        </button>
+
                                     </li>
                                 }
 

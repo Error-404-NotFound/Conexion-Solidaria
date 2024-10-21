@@ -35,7 +35,7 @@ const Login = () => {
 
                 login(responseData);
 
-                setTimeout(() => navigate(responseData.redirectUrl), 1000);
+                setTimeout(() => navigate(responseData.redirectUrl), 500);
             } else {
                 setMessageType('error');
                 setMessage(responseData.message || 'Login failed. Please try again.');
