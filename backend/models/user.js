@@ -16,20 +16,25 @@ const UserSchema = new Schema({
     // need to make things required.
     email: {
         type: String,
-        unique: true
+        unique: true,
+        required: true
     },
     phone: {
         type: String,
-        unique: true
+        unique: true,
+        required: true
     },
     url: {
-        type: String
+        type: String,
+        required: true
     },
     gender: {
-        type: String
+        type: String,
+        required: true
     },
     address: {
-        type: String
+        type: String,
+        required: true
     }
 });
 
@@ -55,4 +60,4 @@ UserSchema.plugin(passportLocalMongoose);
 // };
 
 
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model('User', UserSchema); // model Name , Schema

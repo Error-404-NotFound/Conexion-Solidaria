@@ -159,7 +159,7 @@ export const NavBar = () => {
                                             to="/dashboard"
                                             className={({ isActive }) =>
                                                 `font-bold ${isActive ? 'text-secondary' : `${navBg.includes('bg-transparent') ?
-                                                    'text-white' : 'text-black dark:text-white'}`} hover:text-secondary duration-300`
+                                                    'text-black dark:text-white' : 'text-black dark:text-white'}`} hover:text-secondary duration-300`
                                             }>
                                             Dashboard
                                         </NavLink>

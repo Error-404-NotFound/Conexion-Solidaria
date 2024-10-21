@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../services/api';
 
 const AuthContext = createContext();
 
@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
     // Function to check if the user is authenticated
     const checkAuth = async () => {
         try {
-            const response = await axios.get("http://localhost:3000/is-LoggedIn", { withCredentials: true });
+            const response = await api.get("/is-LoggedIn");
             setUser(response.data.user);  // Assuming your backend returns user info on protected endpoints
         } catch (error) {
             console.log("Got Error:" + error);
@@ -35,7 +35,7 @@ export const AuthProvider = ({ children }) => {
     const logout = async () => {
         try {
             // Send a request to the backend to log out and clear the cookie
-            const response = await axios.post("http://localhost:3000/logout", {}, { withCredentials: true });
+            const response = await api.post("/logout");
             if (response.data.message == "Logged out successfully") {
                 setUser(null);
             }

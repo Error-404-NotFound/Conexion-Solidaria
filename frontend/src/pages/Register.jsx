@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { HiOutlineLocationMarker } from 'react-icons/hi';
 import { useAuth } from '../context/AuthContext';
-import axios from "axios";
+import api from '../services/api';
 
 const Register = () => {
   const [message, setMessage] = useState('');
@@ -26,7 +26,7 @@ const Register = () => {
   const onSubmit = async (data) => {
     // If the passwords do not match, set an error message
     try {
-      const response = await axios.post("http://localhost:3000/register", {
+      const response = await api.post("/register", {
         username: data.name,
         password: data.password,
         email: data.email,

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { AiOutlineUser, AiOutlineLock } from "react-icons/ai";
 import { useForm } from "react-hook-form";
-import axios from "axios";
+import api from "../services/api";
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
@@ -21,7 +21,7 @@ const Login = () => {
 
     const onSubmit = async (data) => {
         try {
-            const response = await axios.post("http://localhost:3000/login", {
+            const response = await api.post("/login", {
                 username: data.username,
                 password: data.password,
             }, {
