@@ -11,12 +11,13 @@ const port = process.env.PORT || 3000;
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 // var GoogleStrategy = require('passport-google-oauth2').Strategy;
-const session = require("express-session");
-const cookie = require("express-session/session/cookie");
+// const session = require("express-session");
+// const cookie = require("express-session/session/cookie");
+const bcrypt = require('bcrypt');
+const cookieParser = require('cookie-parser');
 const User = require('./models/user');// model
 const mongoose = require('mongoose');
 const path = require('path');
-const flash = require('connect-flash');
 
 
 mongoose.connect(process.env.MONGODB_SECRET, {});
@@ -28,35 +29,36 @@ app.use(cors({
 }));
 app.use(express.json());
 
-const sessionConfig = {
-    name: 'session',
-    secret: `${process.env.SESSION_SECRET}`,
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-        httpOnly: true,
-        expires: Date.now() + 24 * 60 * 60 * 1000,
-        maxAge: 1000 * 60 * 60 * 24 * 7
-    }
+
+
+const JWT_SECRET = process.env.JWT_SECRET;
+
+
+// Function to generate JWT
+const generateJWT = (user) => {
+    return jwt.sign({ id: user }, JWT_SECRET, { expiresIn: '1d' });
 };
 
-// verify tokens
+
+// Middleware to verify JWT
 const verifyJWT = (req, res, next) => {
-    const authorization = req.headers.authorization;
-    if (!authorization) {
+    const token = req.cookies.jwt;  // Read token from the cookie
+    console.log("in verifyJWT");
+    if (!token) {
         return res.status(401).send({ message: 'Unauthorized' });
     }
-    const token = authorization?.split(' ')[1];
-    jwt.verify(token, process.env.ACCESS_SECRET, (err, user) => {
+
+    jwt.verify(token, JWT_SECRET, (err, decoded) => {
         if (err) {
             return res.status(403).send({ message: 'Forbidden access' });
         }
-        req.user = user;
+        req.user = decoded;  // Attach user info to the request
         next();
-    })
-}
-// mongodb connection
+    });
+};
 
+
+// mongodb connection
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", () => {
@@ -68,16 +70,52 @@ app.set('views', path.join(__dirname, 'views'))
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(cookieParser());
 
-app.use(flash());
-app.use(session(sessionConfig));
+// app.use(flash());
+// app.use(session(sessionConfig));
 
 app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.session());
 
 passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+passport.serializeUser(User.serializeUser({ session: false }));
+passport.deserializeUser(User.deserializeUser({ session: false }));
+// passport.use(new LocalStrategy(
+//     { usernameField: "username" },  // Assumes you're using `username` field to log in
+//     async (username, password, done) => {
+//         try {
+//             const user = await User.findOne({ username });  // Find user by username
+//             if (!user) {
+//                 return done(null, false, { message: "Incorrect username." });
+//             }
+
+//             // Compare the hashed password with the stored one
+//             const isMatch = await bcrypt.compare(password, user.password);
+//             if (!isMatch) {
+//                 return done(null, false, { message: "Incorrect password." });
+//             }
+
+//             return done(null, user);  // Authentication succeeded
+//         } catch (err) {
+//             return done(err);
+//         }
+//     }
+// ));
+
+// // JWT - based session handling(no actual session is stored)
+// passport.serializeUser((user, done) => {
+//     done(null, user._id);  // Only store user ID in the session (for now we're not using session)
+// });
+
+// passport.deserializeUser(async (id, done) => {
+//     try {
+//         const user = await User.findById(id);  // Fetch the user by ID
+//         done(null, user);
+//     } catch (err) {
+//         done(err, null);
+//     }
+// });
 
 
 // const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
@@ -240,32 +278,105 @@ async function run() {
 }
 // run().catch(console.dir);
 
-app.post('/login', passport.authenticate('local', { failureFlash: true }), (req, res) => {
-    // req.flash('success', 'welcome back!');
-    // const redirectUrl = '/';
-    delete req.session.returnTo;
-    // res.redirect("http://localhost:5173/");
-    return res.status(200).send({ message: 'User registered successfully', redirectUrl: '/posts' });
+app.post('/login', (req, res, next) => {
+    passport.authenticate('local', { session: false }, (err, user, info) => {
+        if (err || !user) {
+            // console.log(info.message);
+            return res.status(400).send({ message: info ? info.message : 'There was an error while logging in. Please try again' });
+        }
+
+        // Generate JWT token after successful authentication
+        const token = generateJWT(user.username);
+
+        res.cookie('jwt', token, {
+            httpOnly: true,   // Cannot be accessed from JavaScript (XSS protection)
+            secure: process.env.NODE_ENV === 'production',  // Only over HTTPS in production
+            sameSite: 'Strict',  // Prevent CSRF attacks
+            maxAge: 24 * 60 * 60 * 1000  // Cookie expires in 1 day
+        });
+        res.status(200).send({ message: 'Login successful', redirectUrl: '/posts' });
+    })(req, res, next);
 });
 
+
+// app.post('/register', async (req, res) => {
+//     try {
+//         const { username, password, phone, url, gender, address } = req.body;
+//         console.log(username, password, phone, url, gender, address);
+
+//         // Create a new user
+//         const user = new User({ username, phone, url, gender, address });
+
+//         // Register the user with the hashed password
+//         const registeredUser = await User.register(user, password);
+
+//         // Automatically log the user in after registering
+//         req.login(registeredUser, err => {
+//             if (err) {
+//                 // If there's an error logging in, respond with an error message
+//                 console.log("Error registering :", err);
+//                 return res.status(500).send({ message: 'There was an error while registering. Please try again' });
+//             }
+
+//             // If the user is logged in, generate a JWT token
+//             const token = generateJWT(username);
+
+//             // Set the token as a cookie in the response
+//             res.cookie('jwt', token, {
+//                 httpOnly: true,   // Cannot be accessed from JavaScript (XSS protection)
+//                 secure: process.env.NODE_ENV === 'production',  // Only over HTTPS in production
+//                 sameSite: 'Strict',  // Prevent CSRF attacks
+//                 maxAge: 24 * 60 * 60 * 1000  // Cookie expires in 1 day
+//             });
+
+//             // Respond with a success message and redirect URL
+//             return res.status(200).send({ message: 'User registered successfully', redirectUrl: '/posts' });
+//         });
+//     } catch (e) {
+//         console.log(e.message);
+//         // If an error occurs during registration, respond with the error message
+//         return res.status(400).send({ message: e.message });
+//     }
+// });
+
+
 app.post('/register', async (req, res) => {
-    // console.log(req.body+"\n");
     try {
         const { username, password, phone, url, gender, address } = req.body;
-        console.log(username, password, phone, url, gender, address);
-        const user = new User({ username, phone, url, gender, address });
-        const registeredUser = await User.register(user, password);
-        req.login(registeredUser, err => {
-            if (err) return next(err);
-            // req.flash('success', 'Welcome to Yelp Camp!');
-            return res.status(200).send({ message: 'User registered successfully', redirectUrl: '/posts' });
+
+        // Create a new user object with the data
+        const newUser = new User({ username, phone, url, gender, address });
+
+        // Register the user (passport-local-mongoose automatically hashes the password)
+        const registeredUser = await User.register(newUser, password);
+
+        // Generate JWT token after successful registration
+        const token = generateJWT(registeredUser.username);
+
+        // Set the JWT token as a cookie (you could also send it in the response)
+        res.cookie('jwt', token, {
+            httpOnly: true,   // To prevent XSS attacks
+            secure: process.env.NODE_ENV === 'production',  // Only use HTTPS in production
+            sameSite: 'Strict',  // Prevent CSRF
+            maxAge: 24 * 60 * 60 * 1000  // 1 day expiration
         });
-    } catch (e) {
-        // req.flash('error', e.message);
-        console.log(e.message);
-        return res.status(200).send({ message: e.message });
+
+        // Send success message and token
+        res.status(200).send({ message: 'User registered successfully', token, redirectUrl: '/posts' });
+
+    } catch (error) {
+        // Handle any registration errors
+        console.error(error);
+        res.status(400).send({ message: error.message });
     }
 });
+
+
+app.get('/protected', verifyJWT, (req, res) => {
+    // console.log("hah");
+    res.send({ user: req.user, message: "You are authenticated!" });
+});
+
 
 app.get('/', (req, res) => {
     res.send('Hello World!')

@@ -43,7 +43,7 @@ const Register = () => {
       });
 
       const responseData = response.data;
-      if (responseData.redirectUrl) {
+      if (responseData.message === 'User registered successfully') {
         setMessageType('success');
         setMessage('Registered successfully!');
         login(responseData);
@@ -53,12 +53,12 @@ const Register = () => {
         setMessage(responseData.message || 'Registration failed. Please try again.');
       }
     } catch (error) {
-      if (error.response && error.response.status === 401) {
+      if (error.response.data.message) {
         setMessageType('error');
-        setMessage(error.response.data.message || 'An unexpected error occurred.');
+        setMessage(error.response.data.message);
       } else {
         setMessageType('error');
-        setMessage('An unexpected error occurred. Please try again.');
+        setMessage('An unexpected error occurred. Please try again');
       }
     }
   };

@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import axios from 'axios';
 
 const AuthContext = createContext();
 
@@ -6,25 +7,34 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null); // Store user info (or token)
     const [loading, setLoading] = useState(true);
 
-
-
-    useEffect(() => {
-        const storedUser = localStorage.getItem('user');
-        if (storedUser) {
-            setUser(JSON.parse(storedUser));
+    // Function to check if the user is authenticated
+    const checkAuth = async () => {
+        try {
+            const response = await axios.get("http://localhost:3000/protected", { withCredentials: true });
+            setUser(response.data.user);  // Assuming your backend returns user info on protected endpoints
+        } catch (error) {
+            console.log("Got Error:" + error);
+            setUser(null);  // In case of error (user not authenticated)
+        } finally {
+            setLoading(false);
         }
-        setLoading(false);
+    };
+
+    // Use useEffect to check auth status on app load
+    useEffect(() => {
+        console.log("useEffect");
+        checkAuth();  // Check authentication when the app mounts
     }, []);
 
 
     const login = (userData) => {
         setUser(userData); // Save user data or token
-        localStorage.setItem('user', JSON.stringify(userData)); // Save to localStorage
+        // sessionStorage.setItem('user', JSON.stringify(userData)); // Save to sessionStorage
     };
 
     const logout = () => {
         setUser(null);
-        localStorage.removeItem('user'); // Clear from localStorage
+        // sessionStorage.removeItem('user'); // Clear from sessionStorage
     };
 
     return (

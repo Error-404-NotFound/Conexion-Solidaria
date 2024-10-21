@@ -24,10 +24,12 @@ const Login = () => {
             const response = await axios.post("http://localhost:3000/login", {
                 username: data.username,
                 password: data.password,
+            }, {
+                withCredentials: true
             });
 
             const responseData = response.data;  // response.data contains the backend response
-            if (responseData.redirectUrl) {
+            if (responseData.message === 'Login successful') {
                 setMessageType('success');
                 setMessage('Login successful!');
 
@@ -39,12 +41,13 @@ const Login = () => {
                 setMessage(responseData.message || 'Login failed. Please try again.');
             }
         } catch (error) {
-            if (error.response && error.response.status === 401) {
+            console.log(error);
+            if (error.response.data.message) {
                 setMessageType('error');
-                setMessage('Invalid credentials. Please try again.');
+                setMessage(error.response.data.message);
             } else {
                 setMessageType('error');
-                setMessage('An unexpected error occurred. Please try again.');
+                setMessage('An unexpected error occurred. Please try again');
             }
         }
     };
