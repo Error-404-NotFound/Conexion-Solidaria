@@ -24,8 +24,6 @@ const Login = () => {
             const response = await api.post("/login", {
                 username: data.username,
                 password: data.password,
-            }, {
-                withCredentials: true
             });
 
             const responseData = response.data;  // response.data contains the backend response
@@ -34,7 +32,7 @@ const Login = () => {
                 setMessage('Login successful!');
 
                 login(responseData);
-
+                console.log(responseData.username);
                 setTimeout(() => navigate(responseData.redirectUrl), 500);
             } else {
                 setMessageType('error');

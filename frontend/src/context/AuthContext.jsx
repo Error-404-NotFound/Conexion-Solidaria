@@ -11,6 +11,7 @@ export const AuthProvider = ({ children }) => {
     const checkAuth = async () => {
         try {
             const response = await api.get("/is-LoggedIn");
+            // console.log(response.data.user);
             setUser(response.data.user);  // Assuming your backend returns user info on protected endpoints
         } catch (error) {
             console.log("Got Error:" + error);
@@ -28,8 +29,8 @@ export const AuthProvider = ({ children }) => {
 
 
     const login = (userData) => {
+        // console.log(userData);
         setUser(userData); // Save user data or token
-        // sessionStorage.setItem('user', JSON.stringify(userData)); // Save to sessionStorage
     };
 
     const logout = async () => {

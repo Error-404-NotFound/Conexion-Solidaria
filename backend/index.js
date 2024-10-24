@@ -14,8 +14,14 @@ const LocalStrategy = require("passport-local");
 const bcrypt = require('bcrypt');
 const cookieParser = require('cookie-parser');
 const User = require('./models/user');// model
+const Post = require('./models/post');
+const Comment = require('./models/comment');
+const Reply = require('./models/reply');
+
 const mongoose = require('mongoose');
 const path = require('path');
+const multer = require('multer');
+const post = require('./models/post');
 
 
 mongoose.connect(process.env.MONGODB_SECRET, {});
@@ -34,28 +40,34 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 // Function to generate JWT
 const generateJWT = (user) => {
-    return jwt.sign({ id: user }, JWT_SECRET, { expiresIn: '1d' });
+    // console.log(user._id);
+    // console.log(user.username);
+    return jwt.sign({ _id: user._id, username: user.username }, JWT_SECRET, { expiresIn: '1d' });
 };
 
 
 // Middleware to verify JWT
 const verifyJWT = (req, res, next) => {
-    const token = req.cookies.jwt;  // Read token from the cookie
-    console.log("in verifyJWT");
+    const token = req.cookies.jwt;
     if (!token) {
-        return res.status(401).send({ message: 'Unauthorized' });
+        return res.status(401).json({ message: 'Unauthorized: No token provided' });
     }
 
-    console.log("JWT Token Exists");
-    jwt.verify(token, JWT_SECRET, (err, decoded) => {
-        if (err) {
-            return res.status(403).send({ message: 'Forbidden access' });
-        }
-        req.user = decoded;  // Attach user info to the request
-        console.log("Going to next");
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        req.user = decoded; // Make sure this contains the user ID
+        // console.log('Decoded JWT:', req.user); // Log to check the extracted user data
         next();
-    });
+    } catch (error) {
+        return res.status(403).json({ message: 'Invalid token' });
+    }
 };
+
+
+// multer for image upload
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
 
 
 // mongodb connection
@@ -286,15 +298,16 @@ app.post('/login', (req, res, next) => {
         }
 
         // Generate JWT token after successful authentication
-        const token = generateJWT(user.username);
+        const token = generateJWT(user);
 
         res.cookie('jwt', token, {
+            // _id: user._id,
             httpOnly: true,   // Cannot be accessed from JavaScript (XSS protection)
             secure: process.env.NODE_ENV === 'production',  // Only over HTTPS in production
             sameSite: 'Strict',  // Prevent CSRF attacks
             maxAge: 24 * 60 * 60 * 1000  // Cookie expires in 1 day
         });
-        res.status(200).send({ message: 'Login successful', redirectUrl: '/posts' });
+        res.status(200).send({ username: user.username, message: 'Login successful', redirectUrl: '/posts' });
     })(req, res, next);
 });
 
@@ -309,13 +322,14 @@ app.post('/register', async (req, res) => {
         const token = generateJWT(registeredUser.username);
 
         res.cookie('jwt', token, {
+            // _id: registeredUser._id,
             httpOnly: true,   // To prevent XSS attacks
             secure: process.env.NODE_ENV === 'production',  // Only use HTTPS in production
             sameSite: 'Strict',  // Prevent CSRF
             maxAge: 24 * 60 * 60 * 1000  // 1 day expiration
         });
 
-        res.status(200).send({ message: 'User registered successfully', token, redirectUrl: '/posts' });
+        res.status(200).send({ username: username, message: 'User registered successfully', token, redirectUrl: '/posts' });
 
     } catch (error) {
         console.error(error);
@@ -337,8 +351,354 @@ app.post('/logout', (req, res) => {
 
 
 app.get('/is-LoggedIn', verifyJWT, (req, res) => {
+    // console.log(req.user);
     res.send({ user: req.user, message: "You are authenticated!" });
 });
+
+
+app.post('/add-post', verifyJWT, upload.single('image'), async (req, res) => {
+    // console.log("In add-post");
+    try {
+        const { description, tag, location, additionalInfo } = req.body;
+        const user = req.user._id;
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        const newPost = new Post({
+            Description: description,
+            Tag: tag,
+            Location: location,
+            author: user,
+            username: req.user.username,
+            Image: req.file
+                ? {
+                    data: req.file.buffer,      // Image binary data
+                    contentType: req.file.mimetype  // Image MIME type
+                }
+                : null,  // No image uploaded
+            additionalInfo: additionalInfo  // Additional field if you want to store this
+        });
+
+        // Save the post to the database
+        await newPost.save();
+
+
+        const savedPost = await Post.findById(newPost._id)
+            .populate({
+                path: 'author', // Populate the 'author' field for the post itself
+                select: 'username', // Fetch only the username of the post author
+            });
+
+        res.status(201).json({ message: 'Post created successfully', post: savedPost });
+    } catch (error) {
+        console.error('Error creating post:', error);
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+});
+
+app.get('/display-posts', verifyJWT, async (req, res) => {
+    try {
+        const posts = await Post.find() // Fetch all posts from the database
+            .populate({
+                path: 'author', // Populate the 'author' field for the post itself
+                select: 'username', // Fetch only the username of the post author
+            })
+            .populate({
+                path: 'comments', // Populate the 'comments' field in Post
+                select: 'comment createdAt likes', // Select specific fields in comments, including createdAt
+                populate: [
+                    {
+                        path: 'author', // Populate the author of each comment
+                        select: 'username', // Fetch only the username of the author
+                    },
+                    {
+                        path: 'replies', // For each comment, populate the 'replies' field
+                        select: 'reply createdAt', // Select specific fields for replies, including createdAt
+                        populate: {
+                            path: 'author', // Populate the author of each reply
+                            select: 'username', // Fetch only the username of the author
+                        },
+                    },
+                ],
+            })
+            .sort({ createdAt: -1 }); // Sort by creation date, most recent first
+
+        res.status(200).json(posts); // Send the posts as JSON
+    } catch (error) {
+        console.error('Error fetching posts:', error);
+        res.status(500).send({ message: 'Internal server error' });
+    }
+});
+
+
+app.post('/posts/:postId/comments', verifyJWT, async (req, res) => {
+    const { postId } = req.params; // Get postId from the URL parameters
+    const { author, createdAt, comment } = req.body; // Destructure the comment data from the request body
+    console.log(postId);
+    console.log("here");
+    // console.log();
+    try {
+        // Find the post by ID
+        const post = await Post.findById(postId);
+        if (!post) {
+            return res.status(404).json({ message: 'Post not found' });
+        }
+
+        // Create a new comment object
+        const newComment = new Comment({
+            author: {
+                _id: author._id, // Assuming author._id is available
+            },
+            username: author.username,
+            createdAt: createdAt || new Date().toISOString(),
+            comment: comment,
+            likes: [],
+            replies: [],
+        });
+        await newComment.save();
+        // Push the new comment to the comments array in the post
+        // console.log(newComment._id);
+        post.comments.push(newComment._id);
+
+        // Save the updated post document
+        await post.save();
+
+        const savedComment = await Comment.findById(newComment._id) // Fetch all posts from the database
+            .populate({
+                path: 'author', // Populate the author of each comment
+                select: 'username', // Fetch only the username of the author
+            })
+            .populate({
+                path: 'replies', // For each comment, populate the 'replies' field
+                select: 'reply createdAt', // Select specific fields for replies, including createdAt
+                populate: {
+                    path: 'author', // Populate the author of each reply
+                    select: 'username', // Fetch only the username of the author
+                },
+            })
+            .sort({ createdAt: -1 }); // Sort by creation date, most recent first
+
+        // Send back the new comment as a response
+        res.status(201).json({ message: 'Comment added successfully', comment: savedComment });
+    } catch (error) {
+        console.error('Error adding comment:', error);
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+});
+
+
+app.post('/comments/:commentId/replies', verifyJWT, async (req, res) => {
+    const { commentId } = req.params; // Get the comment ID from the URL parameters
+    const { author, createdAt, reply } = req.body; // Destructure the reply data from the request body
+    console.log(author.username);
+    console.log(author._id);
+    try {
+        // Find the comment by ID
+        const commentToUpdate = await Comment.findById(commentId);
+        if (!commentToUpdate) {
+            return res.status(404).json({ message: 'Comment not found' });
+        }
+        // console.log("haha");
+        // Create a new reply object
+        const newReply = Reply({
+            username: author.username,
+            author: {
+                _id: author._id, // Assuming author._id is a valid ObjectId
+            },
+            // createdAt: createdAt || new Date().toISOString(),
+            reply: reply, // The reply text
+        });
+
+
+        console.log("here");
+        await newReply.save();
+        console.log(newReply._id);
+        commentToUpdate.replies.push(newReply._id);
+        await commentToUpdate.save();
+
+        // console.log(newReply._id);
+        const savedReply = await Reply.findById(newReply._id) // Fetch all posts from the database
+            .populate({
+                path: 'author', // Populate the author of each comment
+                select: 'username', // Fetch only the username of the author
+            })
+            .sort({ createdAt: -1 }); // Sort by creation date, most recent first
+
+
+        res.status(201).json({ message: 'Reply added successfully', reply: savedReply });
+    } catch (error) {
+        console.error('Error adding reply:', error);
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+});
+
+
+app.post('/posts/:postId/likes', verifyJWT, async (req, res) => {
+    const { userId } = req.body; // Assuming the user ID is sent in the request body
+    const { postId } = req.params; // Get the post ID from the request params
+    // console.log(userId + " " + postId);
+    try {
+        const post = await Post.findById(postId);
+        if (!post) {
+            return res.status(404).json({ message: 'Post not found' });
+        }
+        // console.log("here1");
+        // Check if the user already liked the post
+        if (post.Likes.includes(userId)) {
+            return res.status(400).json({ message: 'Post already liked' });
+        }
+        // console.log("here2");
+        // Add the user's ID to the likes array
+        post.Likes.push(userId);
+        await post.save();
+
+        res.status(200).json({ message: 'Post liked successfully', likes: post.Likes });
+    } catch (error) {
+        console.error('Error liking post:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+// Unlike a post
+app.delete('/posts/:postId/likes', verifyJWT, async (req, res) => {
+    const { userId } = req.body; // Assuming the user ID is sent in the request body
+    const { postId } = req.params; // Get the post ID from the request params
+
+    try {
+        const post = await Post.findById(postId);
+        if (!post) {
+            return res.status(404).json({ message: 'Post not found' });
+        }
+
+        // Check if the user has liked the post
+        if (!post.Likes.includes(userId)) {
+            return res.status(400).json({ message: 'Post not liked yet' });
+        }
+
+        // Remove the user's ID from the likes array
+        post.Likes = post.Likes.filter(id => id.toString() !== userId);
+        await post.save();
+
+        res.status(200).json({ message: 'Post unliked successfully', likes: post.Likes });
+    } catch (error) {
+        console.error('Error unliking post:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+
+app.delete('/posts/:postId', verifyJWT, async (req, res) => {
+    const { postId } = req.params;
+    console.log(postId);
+    try {
+        // Find the post and populate its comments
+        const post = await Post.findById(postId).populate('comments');
+
+        if (!post) {
+            return res.status(404).json({ message: 'Post not found' });
+        }
+
+        // Iterate over each comment to delete its replies
+        for (const comment of post.comments) {
+            const tempComment = await Comment.findById(comment._id);
+            for (const reply of tempComment.replies) {
+                await Reply.findByIdAndDelete(reply._id);
+            }
+        }
+
+        // Now delete all comments associated with this post
+        const commentIds = post.comments.map(comment => comment._id);
+        await Comment.deleteMany({ _id: { $in: commentIds } }); // Deletes all comments associated with the post
+
+        // Finally, delete the post
+        await Post.findByIdAndDelete(postId);
+
+        res.status(200).json({ message: 'Post and associated comments and replies deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting post and its comments:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+
+app.delete('/posts/:postId/comments/:commentId', verifyJWT, async (req, res) => {
+    const { postId, commentId } = req.params;
+    // console.log(postId + " " + commentId);
+    try {
+        // Find the post by ID
+        const post = await Post.findById(postId);
+
+        if (!post) {
+            return res.status(404).json({ message: 'Post not found' });
+        }
+
+        // Find the comment to delete
+        const commentIndex = post.comments.findIndex(comment => comment._id.toString() === commentId);
+        console.log("haha" + " " + commentIndex);
+        if (commentIndex === -1) {
+            return res.status(404).json({ message: 'Comment not found' });
+        }
+        // console.log("haha");
+        // Delete all replies associated with this comment from the Reply model
+        const findComment = await Comment.findById(commentId);
+        repliesToDelete = findComment.replies.map(reply => reply._id);
+
+        await Reply.deleteMany({ _id: { $in: repliesToDelete } });
+
+        // Remove the comment from the post's comments array
+        post.comments.splice(commentIndex, 1); // Remove the comment
+
+        // Optionally, if you have a separate Comment model, delete it as well
+        await Comment.findByIdAndDelete(commentId);
+
+        // Save the modified post
+        await post.save();
+
+        res.status(200).json({ message: 'Comment and its replies deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting comment and replies:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+
+app.delete('/comments/:commentId/replies/:replyId', verifyJWT, async (req, res) => {
+    const { commentId, replyId } = req.params;
+
+    try {
+        // First, delete the reply from the Replies model
+        const deletedReply = await Reply.findByIdAndDelete(replyId);
+        if (!deletedReply) {
+            return res.status(404).json({ message: 'Reply not found' });
+        }
+
+        // Next, find the comment and remove the reply from its replies array
+        await Comment.findByIdAndUpdate(
+            commentId,
+            { $pull: { replies: { _id: replyId } } }, // Remove the reply ID from the replies array
+            { new: true } // Optionally return the updated comment
+        );
+
+        res.status(200).json({ message: 'Reply deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting reply:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+
+
+// need to remove later
+app.delete('/delete-all-posts', async (req, res) => {
+    try {
+        const result = await Post.deleteMany({});
+        res.status(200).json({ message: 'All posts deleted successfully', result });
+    } catch (error) {
+        console.error('Error deleting posts:', error);
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+});
+
 
 
 app.get('/', (req, res) => {

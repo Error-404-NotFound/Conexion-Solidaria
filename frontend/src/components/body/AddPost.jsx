@@ -1,54 +1,65 @@
 import React, { useState, useRef } from 'react';
 import './AddPost.css'; // Import the CSS file
-import aniket from "../../assets/aniket.png";
+import { useAuth } from "../../context/AuthContext";
+import api from "../../services/api";
 
 const AddPost = ({ addNewPost }) => {
+  const { user } = useAuth();
   const [description, setDescription] = useState('');
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState(null);  // Store the actual image file
+  const [imagePreview, setImagePreview] = useState(null);  // Store the image preview URL
   const [tag, setTag] = useState('cloth');
   const [location, setLocation] = useState('');
   const [additionalInfo, setAdditionalInfo] = useState('');
+  const [loading, setLoading] = useState(false);  // Loading state for form submission
 
   const imageInputRef = useRef(null); // Create a reference for the image input
 
+  // Handle the image change event (both preview and actual file)
   const handleImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
-      setImage(URL.createObjectURL(e.target.files[0]));
+      const file = e.target.files[0];
+      setImage(file);  // Store the actual file
+      setImagePreview(URL.createObjectURL(file));  // Store the preview URL
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const timestamp = new Date().toISOString();
-    const newPost = {
-      userId: {
-        _id: "user100",
-        firstName: "Aniket",
-        lastName: "Johri",
-        profileUrl: aniket,
-        location: "Tirupati",
-      },
-      createdAt: timestamp,
-      description,
-      image,
-      tag,
-      location,
-      additionalInfo,
-      likes: [],
-      comments: [],
-    };
-    addNewPost(newPost);
+  // Handle form submission
+  const handleSubmit = async (ev) => {
+    ev.preventDefault();
 
-    // Clear the form fields
-    setDescription('');
-    setImage(null);
-    setTag('cloth');
-    setLocation('');
-    setAdditionalInfo('');
+    const formData = new FormData();
+    formData.append('description', description);
+    formData.append('tag', tag);
+    formData.append('location', location);
+    formData.append('additionalInfo', additionalInfo);
+    formData.append('userId', user._id); // Send logged-in user ID
+    if (image) {
+      formData.append('image', image); // Append the image file
+    }
 
-    // Clear the image input field using the ref
-    if (imageInputRef.current) {
-      imageInputRef.current.value = '';
+    setLoading(true); // Set loading to true when the request is in progress
+
+    try {
+      const response = await api.post('/add-post', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',  // Ensure the correct content type is set
+        },
+      });
+
+      addNewPost(response.data.post); // Add the new post to the UI
+      console.log(response.data.post);
+      // Reset form state
+      setDescription('');
+      setImage(null);
+      setImagePreview(null);  // Clear the preview
+      setTag('cloth');
+      setLocation('');
+      setAdditionalInfo('');
+    } catch (error) {
+      console.error('Error creating post:', error.response ? error.response.data : error.message);
+    } finally {
+      setLoading(false); // Reset loading state after the request is done
     }
   };
 
@@ -81,6 +92,7 @@ const AddPost = ({ addNewPost }) => {
             required
             className="dark:text-white"
           />
+          {imagePreview && <img src={imagePreview} alt="Preview" className="image-preview" />}
         </div>
 
         <div className="form-group">
@@ -110,7 +122,9 @@ const AddPost = ({ addNewPost }) => {
           />
         </div>
 
-        <button type="submit" className="submit-button">Add Post</button>
+        <button type="submit" className="submit-button" disabled={loading}>
+          {loading ? 'Uploading...' : 'Add Post'}
+        </button>
       </form>
     </div>
   );
