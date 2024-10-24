@@ -15,8 +15,8 @@ const PostSchema = new Schema({
         required: true
     },
     Image: {
-        data: Buffer,  // Store the binary image data
-        contentType: String  // Store the image's MIME type, e.g., 'image/jpeg', 'image/png'
+        url: String,
+        filename: String
     },
     Likes: {
         type: [String],

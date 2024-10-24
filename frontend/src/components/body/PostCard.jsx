@@ -228,7 +228,7 @@ const PostCard = ({ post, onDelete }) => {
         </div>
 
         {post.Image && (
-          <img src={aniket} alt="Post" className="post-card-image" />
+          <img src={post.Image.url} alt="Post" className="post-card-image" />
         )}
       </div>
       <div className="post-card-footer">

@@ -20,9 +20,11 @@ const Reply = require('./models/reply');
 
 const mongoose = require('mongoose');
 const path = require('path');
-const multer = require('multer');
 const post = require('./models/post');
-
+const multer = require('multer');
+const { storage } = require('./cloudinary/index');
+const upload = multer({ storage });
+const { cloudinary } = require('./cloudinary/index');
 
 mongoose.connect(process.env.MONGODB_SECRET, {});
 
@@ -63,10 +65,6 @@ const verifyJWT = (req, res, next) => {
     }
 };
 
-
-// multer for image upload
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
 
 
 
@@ -370,12 +368,10 @@ app.post('/add-post', verifyJWT, upload.single('image'), async (req, res) => {
             Location: location,
             author: user,
             username: req.user.username,
-            Image: req.file
-                ? {
-                    data: req.file.buffer,      // Image binary data
-                    contentType: req.file.mimetype  // Image MIME type
-                }
-                : null,  // No image uploaded
+            Image: {
+                url: req.file.path,      // Image binary data
+                filename: req.file.filename  // Image MIME type
+            },
             additionalInfo: additionalInfo  // Additional field if you want to store this
         });
 
@@ -593,6 +589,8 @@ app.delete('/posts/:postId', verifyJWT, async (req, res) => {
     try {
         // Find the post and populate its comments
         const post = await Post.findById(postId).populate('comments');
+
+        cloudinary.uploader.destroy(post.Image.filename);
 
         if (!post) {
             return res.status(404).json({ message: 'Post not found' });
