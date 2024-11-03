@@ -1,6 +1,7 @@
 import { AiOutlineUser, AiOutlineMail, AiOutlineLock, AiOutlinePhone, AiOutlinePicture } from "react-icons/ai";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { motion } from 'framer-motion';
 import { useNavigate } from "react-router-dom";
 import { HiOutlineLocationMarker } from 'react-icons/hi';
 import { useAuth } from '../context/AuthContext';
@@ -58,14 +59,27 @@ const Register = () => {
   };
 
   return (
-    <div className="flex justify-center items-center pt-14 min-h-screen bg-gray-100 mt-10 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans">
-      <div className="bg-white p-8 rounded-lg shadow-md dark:bg-black dark:text-white">
+    <div className="flex justify-center items-center pt-24 min-h-screen bg-gray-100 mt-20 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans">
+      <motion.div 
+        className="bg-white p-8 rounded-lg shadow-md dark:bg-black dark:text-white"
+        initial={{ rotateY: -270, opacity: 0 }}
+        animate={{ rotateY: 0, opacity: 1 }}
+        transition={{ duration: 1.0, ease: "easeOut" }}
+        whileHover={{ scale: 1.05, duration: 0.3 }}
+        >
+
         <h2 className="text-3xl font-bold text-center mb-6">Please Register</h2>
         {message && (
-          <div className={`p-4 mb-4 text-center rounded-lg ${messageType === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className={`p-4 mb-4 text-center rounded-lg ${messageType === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}
+          >
             {message}
-          </div>
+          </motion.div>
         )}
+
         {/* form data */}
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex items-center gap-5">
@@ -195,7 +209,7 @@ const Register = () => {
         <p className="text-center mt-4">
           Already have an account? <a href="/login" className="text-secondary">Login</a>
         </p>
-      </div>
+      </motion.div>
     </div>
   );
 };

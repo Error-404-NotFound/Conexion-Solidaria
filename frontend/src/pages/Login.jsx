@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { AiOutlineUser, AiOutlineLock } from "react-icons/ai";
 import { useForm } from "react-hook-form";
+import { motion } from 'framer-motion';
 import api from "../services/api";
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -10,7 +11,6 @@ const Login = () => {
     const [messageType, setMessageType] = useState('');
 
     const { login } = useAuth();
-
     const navigate = useNavigate();
 
     const {
@@ -26,42 +26,44 @@ const Login = () => {
                 password: data.password,
             });
 
-            const responseData = response.data;  // response.data contains the backend response
+            const responseData = response.data;
             if (responseData.message === 'Login successful') {
                 setMessageType('success');
                 setMessage('Login successful!');
-
                 login(responseData);
-                console.log(responseData.username);
                 setTimeout(() => navigate(responseData.redirectUrl), 500);
             } else {
                 setMessageType('error');
                 setMessage(responseData.message || 'Login failed. Please try again.');
             }
         } catch (error) {
-            console.log(error);
-            if (error.response.data.message) {
-                setMessageType('error');
-                setMessage(error.response.data.message);
-            } else {
-                setMessageType('error');
-                setMessage('An unexpected error occurred. Please try again');
-            }
+            setMessageType('error');
+            setMessage(error.response?.data.message || 'An unexpected error occurred. Please try again');
         }
     };
 
     return (
         <div className="flex justify-center items-center pt-14 min-h-screen bg-gray-100 mt-10 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans">
-            <div className="bg-white p-8 rounded-lg shadow-md dark:bg-black dark:text-white">
+            <motion.div
+                className="bg-white p-8 rounded-lg shadow-md dark:bg-black dark:text-white"
+                initial={{ rotateY: -450, opacity: 0 }}
+                animate={{ rotateY: 0, opacity: 1 }}
+                transition={{ duration: 1.5, ease: "easeOut" }}
+                whileHover={{ scale: 1.05, duration: 0.3 }}
+            >
                 <h2 className="text-3xl font-bold text-center mb-6">Please Login</h2>
                 {message && (
-                    <div className={`p-4 mb-4 text-center rounded-lg ${messageType === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.5 }}
+                        className={`p-4 mb-4 text-center rounded-lg ${messageType === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}
+                    >
                         {message}
-                    </div>
+                    </motion.div>
                 )}
 
                 <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
-                    {/* Username Field */}
                     <div className="flex items-center border-gray-300 py-2 dark:text-white">
                         <AiOutlineUser className="inline-block mr-2 mb-1 text-lg" />
                         <input
@@ -73,7 +75,6 @@ const Login = () => {
                     </div>
                     {errors.username && <p className="text-red-500 text-xs italic">Username is required.</p>}
 
-                    {/* Password Field */}
                     <div className="flex items-center border-gray-300 py-2 dark:text-white">
                         <AiOutlineLock className="inline-block mr-2 mb-1 text-lg" />
                         <input
@@ -85,7 +86,6 @@ const Login = () => {
                     </div>
                     {errors.password && <p className="text-red-500 text-xs italic">Password is required.</p>}
 
-                    {/* Submit Button */}
                     <div>
                         <button
                             type="submit"
@@ -95,7 +95,7 @@ const Login = () => {
                         </button>
                     </div>
                 </form>
-                {/* Optional: Add forgot password and signup links */}
+                
                 <div className="text-center mt-4">
                     <a href="#" className="text-indigo-500 hover:underline">Forgot Password?</a>
                     <p className="mt-2">
@@ -103,7 +103,7 @@ const Login = () => {
                         <a href="/register" className="text-indigo-500 hover:underline">Sign up</a>
                     </p>
                 </div>
-            </div>
+            </motion.div>
         </div>
     );
 };
