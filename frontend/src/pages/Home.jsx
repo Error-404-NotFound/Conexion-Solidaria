@@ -4,6 +4,16 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import "./TextScroll.css"; // Import custom CSS for animation
+import Slider from 'react-slick';
+import "slick-carousel/slick/slick.css"; // Import slick carousel CSS
+import "slick-carousel/slick/slick-theme.css"; // Import slick theme CSS
+
+const img3 = "https://images.unsplash.com/photo-1608342381036-15657da6bf58?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+const img1 = imbg;
+const img4 = "https://images.pexels.com/photos/7345444/pexels-photo-7345444.jpeg?auto=compress&cs=tinysrgb&w=600";
+const img2 = "https://images.unsplash.com/photo-1518398046578-8cca57782e17?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+
+
 
 export const Home = () => {
   return (
@@ -31,14 +41,17 @@ export const Home = () => {
       </header>
       */}
 
+      <div className="text-gray-400 dark:text-gray-500 flex-1 pt-14 space-y-8 pl-16">
+        Welcome to Conexion-Solidaria
+      </div>
+      {/* Full-width image slider */}
+      <FullWidthImageSlider />
+
       {/* Main Content */}
-      <main className="flex flex-col md:flex-row items-center justify-between p-8 md:p-16">
+      <main className="flex flex-col md:flex-row items-center justify-between pl-8 md:p-16">
         {/* Left Column */}
         <div className="flex-1 space-y-8">
-          {/* Placeholder Text */}
-          <div className="text-gray-400 dark:text-gray-500">
-            Welcome to Conexion-Solidaria
-          </div>
+
 
           {/* Section Heading and Description */}
           <div>
@@ -111,11 +124,59 @@ export const Home = () => {
 
       {/* Infosys Stats */}
       <InfosysStats />
-     
+
     </div>
   )
 }
 
+export const FullWidthImageSlider = () => {
+  // Slick slider settings
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000, // change the speed to control slide transition
+    arrows: false,
+  };
+
+  return (
+    <div className="relative w-full pt-4" >
+      <Slider {...settings}>
+        <div>
+          <img
+            src={img1}
+            alt="Slide 1"
+            className="w-full h-96 object-cover"
+          />
+        </div>
+        <div>
+          <img
+            src={img2}
+            alt="Slide 2"
+            className="w-full h-96 object-cover"
+          />
+        </div>
+        <div>
+          <img
+            src={img3}
+            alt="Slide 3"
+            className="w-full h-96 object-cover"
+          />
+        </div>
+        <div>
+          <img
+            src={img4}
+            alt="Slide 4"
+            className="w-full h-96 object-cover"
+          />
+        </div>
+      </Slider>
+    </div>
+  );
+};
 
 export const InfoSection = () => {
   return (
@@ -132,7 +193,7 @@ export const InfoSection = () => {
       {/* Right: Text Content */}
       <div className="w-full md:w-1/2">
         <h2 className="text-2xl md:text-4xl font-bold mb-4 leading-tight">
-        At Conexion-Solidaria, we believe that every act of kindness matters. Our platform focuses on <span className="text-gray-400 dark:text-gray-500">bringing communities together</span> and offering a space where <span className="text-gray-400 dark:text-gray-500">help can be provided locally</span>. Whether you’re an individual or an organization, you can <span className="text-gray-400 dark:text-gray-500">make a real difference</span> by connecting with those around you.
+          At Conexion-Solidaria, we believe that every act of kindness matters. Our platform focuses on <span className="text-gray-400 dark:text-gray-500">bringing communities together</span> and offering a space where <span className="text-gray-400 dark:text-gray-500">help can be provided locally</span>. Whether you’re an individual or an organization, you can <span className="text-gray-400 dark:text-gray-500">make a real difference</span> by connecting with those around you.
         </h2>
 
         {/* Button */}
@@ -159,7 +220,7 @@ export const WhyUS = () => {
       {/* Left: Text Content */}
       <div className="w-full md:w-1/2">
         <p className="text-base md:text-base font-bold mb-4 leading-tight pr-40">
-        The platform is designed to be <span className="text-gray-400 dark:text-gray-500">user-friendly</span>, allowing anyone to <span className="text-gray-400 dark:text-gray-500">post help requests</span> or offer assistance in a few easy steps. With <span className="text-gray-400 dark:text-gray-500">categorized tags</span> like food, clothing, and shelter, users can easily find relevant posts based on their interests and location, creating a more <span className="text-gray-400 dark:text-gray-500">targeted approach</span> to community help.
+          The platform is designed to be <span className="text-gray-400 dark:text-gray-500">user-friendly</span>, allowing anyone to <span className="text-gray-400 dark:text-gray-500">post help requests</span> or offer assistance in a few easy steps. With <span className="text-gray-400 dark:text-gray-500">categorized tags</span> like food, clothing, and shelter, users can easily find relevant posts based on their interests and location, creating a more <span className="text-gray-400 dark:text-gray-500">targeted approach</span> to community help.
         </p>
 
         {/* Button */}
