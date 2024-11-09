@@ -64,7 +64,7 @@ const AddPost = ({ addNewPost }) => {
   };
 
   return (
-    <div className="add-post-container bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans transition-colors duration-300">
+    <div className="add-post-container bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200 font-sans transition-colors duration-300">
       <div className="add-post-heading">
         <h2>Add New Post</h2>
       </div>

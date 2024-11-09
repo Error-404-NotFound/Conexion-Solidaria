@@ -79,7 +79,7 @@ export const NavBar = () => {
             transition={{ duration: 0.5 }}
             className={`${navBg} ${isFixed ? "fixed" : "sticky"} top-0 transition-all duration-300 ease-in-out w-full z-50 shadow-lg border-b border-gray-200 dark:border-gray-700 ${navbarHeight}`}
         >
-            <div className="lg:w-[95%] mx-auto sm:px-6 lg:px-6">
+            <div className="lg:w-[95%] mx-auto sm:px-6 lg:px-6 ">
                 <div className="px-4 py-2 flex items-center justify-between">
                     {/* Logo */}
                     <div>

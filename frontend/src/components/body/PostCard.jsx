@@ -195,7 +195,7 @@ const PostCard = ({ post, onDelete }) => {
 
 
   return (
-    <div className="post-card" >
+    <div className="post-card bg-white dark:bg-gray-600 text-gray-900 dark:text-gray-200" >
       <div className="post-card-header">
         <img
           src={userprofile}
@@ -204,9 +204,9 @@ const PostCard = ({ post, onDelete }) => {
         />
         <div className="post-card-user-info">
           <p className="post-card-user-name">{`${post.author.username} `}</p>
-          <p className="post-card-location">{post.Location}</p>
+          <p className="post-card-location text-gray-900 dark:text-gray-200">{post.Location}</p>
         </div>
-        <span className="post-card-timestamp">{timeAgo(post.createdAt)}</span>
+        <span className="post-card-timestamp text-gray-900 dark:text-gray-200">{timeAgo(post.createdAt)}</span>
       </div>
       {/* <button className="delete-post-button" onClick={handleDeletePost}>
           Delete
@@ -236,7 +236,7 @@ const PostCard = ({ post, onDelete }) => {
           {likes.includes(userId) ? (
             <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="#0000ff" d="M23 10a2 2 0 0 0-2-2h-6.32l.96-4.57c.02-.1.03-.21.03-.32c0-.41-.17-.79-.44-1.06L14.17 1L7.59 7.58C7.22 7.95 7 8.45 7 9v10a2 2 0 0 0 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73zM1 21h4V9H1z" /></svg>
           ) : (
-            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="black" d="M5 9v12H1V9zm4 12a2 2 0 0 1-2-2V9c0-.55.22-1.05.59-1.41L14.17 1l1.06 1.06c.27.27.44.64.44 1.05l-.03.32L14.69 8H21a2 2 0 0 1 2 2v2c0 .26-.05.5-.14.73l-3.02 7.05C19.54 20.5 18.83 21 18 21zm0-2h9.03L21 12v-2h-8.79l1.13-5.32L9 9.03z" /></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" ><path fill="black" d="M5 9v12H1V9zm4 12a2 2 0 0 1-2-2V9c0-.55.22-1.05.59-1.41L14.17 1l1.06 1.06c.27.27.44.64.44 1.05l-.03.32L14.69 8H21a2 2 0 0 1 2 2v2c0 .26-.05.5-.14.73l-3.02 7.05C19.54 20.5 18.83 21 18 21zm0-2h9.03L21 12v-2h-8.79l1.13-5.32L9 9.03z" /></svg>
           )}
           {likes.length} Likes
         </p>
@@ -265,7 +265,7 @@ const PostCard = ({ post, onDelete }) => {
               onChange={(e) => setNewComment(e.target.value)}
               placeholder="Add a comment..."
               width="50%"
-              className="post-card-comment-input"
+              className="post-card-comment-input text-gray-700"
               required
             />
             <button type="submit" className="post-card-submit-button">
@@ -283,7 +283,7 @@ const PostCard = ({ post, onDelete }) => {
                 <div className="post-card-comment-user-info">
                   <p className="post-card-comment-user-name">
                     {`${comment.author.username} `}
-                    <span className="post-card-comment-time" style={{ color: '#666', fontSize: '0.9em', fontWeight: 'normal' }}>{timeAgo(comment.createdAt)} </span>
+                    <span className="post-card-comment-time dark:text-gray-200" style={{ fontSize: '0.9em', fontWeight: 'normal' }}>{timeAgo(comment.createdAt)} </span>
                   </p>
                 </div>
 
@@ -293,7 +293,7 @@ const PostCard = ({ post, onDelete }) => {
               <p className="post-card-comment-text" style={{ paddingLeft: '5px' }}>{comment.comment}</p>
               <div className="post-card-comment-actions" style={{ paddingLeft: '5px' }}>
                 <form onSubmit={(e) => { handleReplySubmit(e, comment._id) }}>
-                  <input type="text" name="replyInput" style={{ paddingLeft: '5px', paddingTop: '2px', paddingBottom: '2px' }} placeholder="Reply..." required />
+                  <input type="text" name="replyInput" className="text-gray-700" style={{ paddingLeft: '5px', paddingTop: '2px', paddingBottom: '2px' }} placeholder="Reply..." required />
                   <button type="submit" className="post-card-reply-button">Reply</button>
                 </form>
                 {/* Show delete button only if the logged-in user is the comment author */}
@@ -319,7 +319,7 @@ const PostCard = ({ post, onDelete }) => {
                       />
                       <div>
                         <p className="post-card-reply-user-name">{`${reply.author.username} `}
-                          <span className="post-card-reply-comment-time" style={{ color: '#666', fontSize: '0.9em', fontWeight: 'normal' }}>{timeAgo(reply.createdAt)} </span>
+                          <span className="post-card-reply-comment-time dark:text-gray-200" style={{ fontSize: '0.9em', fontWeight: 'normal' }}>{timeAgo(reply.createdAt)} </span>
                         </p>
                         <p className="post-card-reply-text">{reply.reply}
 

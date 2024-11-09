@@ -112,7 +112,7 @@ const Posts = () => {
 
   return (
     <div style={{ display: 'flex', marginTop: '90px', marginBottom: '20px', justifyContent: 'space-around', marginLeft: '2%', marginRight: '2%' }}>
-      <div style={{ width: '100%', maxWidth: '100%', marginLeft: '2%' }}>
+      <div style={{ width: '75%', maxWidth: '100%', marginLeft: '2%' }}>
         <AddPost addNewPost={addNewPost} />
       </div>
 
