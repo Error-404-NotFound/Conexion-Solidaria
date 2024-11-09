@@ -57,6 +57,7 @@ const verifyJWT = (req, res, next) => {
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        console.log(decoded);
         req.user = decoded; // Make sure this contains the user ID
         // console.log('Decoded JWT:', req.user); // Log to check the extracted user data
         next();
@@ -317,7 +318,7 @@ app.post('/register', async (req, res) => {
 
         const registeredUser = await User.register(newUser, password);
 
-        const token = generateJWT(registeredUser.username);
+        const token = generateJWT(registeredUser);
 
         res.cookie('jwt', token, {
             // _id: registeredUser._id,
@@ -359,6 +360,7 @@ app.post('/add-post', verifyJWT, upload.single('image'), async (req, res) => {
     try {
         const { description, tag, location, additionalInfo } = req.body;
         const user = req.user._id;
+        // console.log(req);
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
@@ -377,7 +379,6 @@ app.post('/add-post', verifyJWT, upload.single('image'), async (req, res) => {
 
         // Save the post to the database
         await newPost.save();
-
 
         const savedPost = await Post.findById(newPost._id)
             .populate({

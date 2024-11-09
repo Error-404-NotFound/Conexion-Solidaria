@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./PostCard.css";
-import aniket from "../../assets/aniket.png";
+import userprofile from "../../assets/userprofile.png";
 import api from "../../services/api"
 import { useAuth } from "../../context/AuthContext";
 import Posts from "../../pages/Posts";
@@ -198,7 +198,7 @@ const PostCard = ({ post, onDelete }) => {
     <div className="post-card" >
       <div className="post-card-header">
         <img
-          src={aniket}
+          src={userprofile}
           alt={`${post.author.username}`}
           className="post-card-user-image"
         />
@@ -276,7 +276,7 @@ const PostCard = ({ post, onDelete }) => {
             <div key={comment._id} className="post-card-comment">
               <div className="post-card-comment-header">
                 <img
-                  src={aniket}
+                  src={userprofile}
                   alt={comment.author.username}
                   className="post-card-comment-user-image"
                 />
@@ -313,7 +313,7 @@ const PostCard = ({ post, onDelete }) => {
 
                     <div key={reply._id} className="post-card-reply">
                       <img
-                        src={aniket}
+                        src={userprofile}
                         alt={reply.author.username}
                         className="post-card-reply-user-image"
                       />
