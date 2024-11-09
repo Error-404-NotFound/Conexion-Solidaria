@@ -2,7 +2,7 @@ import React from 'react';
 
 export const Footer = () => {
     return (
-        <footer className="bg-black text-white py-12 px-8 mt-16">
+        <footer className="bg-black text-white py-12 px-8 ">
             <div className="max-w-screen-xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
                 {/* About Us Section */}
                 <div className="space-y-4">
@@ -17,16 +17,16 @@ export const Footer = () => {
                     <h3 className="text-2xl font-semibold">Quick Links</h3>
                     <ul className="space-y-2 text-gray-400">
                         <li>
-                            <a href="#home" className="hover:text-teal-300 transition duration-300">Home</a>
+                            <a href="/" className="hover:text-teal-300 transition duration-300">Home</a>
                         </li>
                         <li>
-                            <a href="#about" className="hover:text-teal-300 transition duration-300">About</a>
+                            <a href="about" className="hover:text-teal-300 transition duration-300">About</a>
                         </li>
                         <li>
                             <a href="#donate" className="hover:text-teal-300 transition duration-300">Donate</a>
                         </li>
                         <li>
-                            <a href="#contact" className="hover:text-teal-300 transition duration-300">Contact</a>
+                            <a href="contact" className="hover:text-teal-300 transition duration-300">Contact</a>
                         </li>
                     </ul>
                 </div>

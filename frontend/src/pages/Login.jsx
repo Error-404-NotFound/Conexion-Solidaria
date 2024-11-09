@@ -95,7 +95,7 @@ const Login = () => {
                         </button>
                     </div>
                 </form>
-                
+
                 <div className="text-center mt-4">
                     <a href="#" className="text-indigo-500 hover:underline">Forgot Password?</a>
                     <p className="mt-2">

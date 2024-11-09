@@ -1,5 +1,3 @@
-// src/components/ProtectedRoute.js
-
 import React from 'react';
 import { Route, Navigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
@@ -12,14 +10,13 @@ const ProtectedRoute = ({ children }) => {
         return <div>Loading...</div>; // Or a loading spinner could go here
     }
 
+    if (!user) {
+        // Show an alert if the user is not logged in
+        window.alert('You need to be logged in to access this page.');
+        return <Navigate to="/login" />;
+    }
 
-    return user ? children : <Navigate to="/login" />;
-    // return (
-    //     <Route
-    //         {...rest}
-    //         element={user ? element : <Navigate to="/login" replace />}
-    //     />
-    // );
+    return children;
 };
 
 export default ProtectedRoute;
