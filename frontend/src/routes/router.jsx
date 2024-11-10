@@ -10,6 +10,7 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Posts from "../pages/Posts";
 import ProtectedRoute from '../components/body/ProtectedRoute';
+import { ProfileCard } from "../pages/Profile";
 // import PostCard from "../components/body/PostCard";
 
 export const router = createBrowserRouter([
@@ -51,6 +52,14 @@ export const router = createBrowserRouter([
                     <ProtectedRoute>
                         <Posts />
                     </ProtectedRoute>
+                ),
+            },
+            {
+                path: "/profile",
+                element: (
+                    // <ProtectedRoute>
+                        <ProfileCard />
+                    // </ProtectedRoute>
                 ),
             },
             {

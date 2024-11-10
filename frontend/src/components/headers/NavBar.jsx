@@ -148,7 +148,7 @@ export const NavBar = () => {
                                         </NavLink>
                                     </li>
                                     <li>
-                                        <img src={user?.photoURL || '../src/assets/home/girl.jpg'} alt={user?.displayName} className="w-6 h-6 rounded-full" />
+                                        <img src={user?.photoURL || 'https://via.placeholder.com/150'} alt={user?.displayName} className="w-6 h-6 rounded-full" />
                                     </li>
                                     <li>
                                         <button
@@ -168,8 +168,19 @@ export const NavBar = () => {
                                     </div>
                                 </ThemeProvider>
                             </li>
+
+                            {/* Desktop Menu */}
+                            <li key="/profile">
+                                <NavLink
+                                    to="/profile"
+                                    className="font-semibold text-base text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-secondary transition-colors duration-200"
+                                >
+                                    <img src="https://via.placeholder.com/150" alt="Profile" className="w-6 h-6 rounded-full" />
+                                </NavLink>
+                            </li>
                         </ul>
                     </div>
+
                 </div>
             </div>
         </motion.nav>
