@@ -33,14 +33,101 @@ const timeAgo = (date) => {
 
 
 const PostCard = ({ post, onDelete }) => {
+  // console.log("donation");
+  // console.log(post.donation);
   const { posts } = Posts();
   const { user } = useAuth();
   const userId = user.username; // This should be replaced with the actual logged-in user's ID
   const [showAll, setShowAll] = useState(false);
   const [showComments, setShowComments] = useState(false);
+  const [donationClaimRemark, setDonationClaimRemark] = useState("");
+  const [claimDonation, setClaimDonation] = useState(false);
+  const [verifyDonation, setVerifyDonation] = useState(false);
   const [likes, setLikes] = useState(post.Likes);
   const [newComment, setNewComment] = useState("");
-  const [comments, setComments] = useState(post.comments);
+  const [comments, setComments] = useState(post.comments);//[{ _id: 1, donorName: "Ashish", remark: "Donated 1kg rice" }, { _id: 2, donorName: "Raj", remark: "Donated 100 cloths" }]
+  const filteredDonations = post.donation.filter(donation => donation.percentageHelped === 0);
+  const [donationsToVerify, setDonationsToVerify] = useState(filteredDonations);
+  const [donationPercentage, setDonationPercentage] = useState({});
+
+  const handleDonationPercentageChange = (donationId, value) => {
+    // console.log(donationId);
+    setDonationPercentage(prev => ({
+      ...prev,
+      [donationId]: value
+    }));
+  };
+
+
+  // Inside PostCard Component
+  const handleDonationClaim = async (e) => {
+    e.preventDefault();
+    // if (!donationClaimRemark) {
+    //   alert("Please enter donation details to submit your claim.");
+    //   return;
+    // }
+
+    try {
+      // Prepare the payload for the API request
+      const claimData = {
+        donorName: user.username,
+        remark: donationClaimRemark,
+        postId: post._id, // assuming you need to link it to the post
+      };
+
+      // Send the claim data to the backend API
+      const response = await api.post(`/posts/${post._id}/donation-claims`, claimData);
+
+      if (response.status === 200) {
+        // Successfully submitted the donation claim
+        alert("Donation claim submitted successfully.");
+        setDonationClaimRemark(""); // Clear the input field
+        setClaimDonation(false); // Optionally close the form
+      } else {
+        alert("Failed to submit donation claim.");
+      }
+    } catch (error) {
+      console.error("Error submitting donation claim:", error);
+      alert("An error occurred while submitting your donation claim.");
+    }
+  };
+
+
+  // Inside the PostCard component, add this function:
+
+  const handleVerifyDonationSubmit = async (e, donationId) => {
+    e.preventDefault();
+
+    // Get the percentage value for the specific donation ID
+    const percentage = donationPercentage[donationId];
+
+    if (!percentage || percentage < 0 || percentage > 100) {
+      alert("Please enter a valid percentage between 0 and 100.");
+      return;
+    }
+
+    try {
+      // Prepare the payload
+      const verificationData = {
+        donationId,
+        percentage: parseInt(percentage),
+      };
+
+      // Make the API call to verify the donation
+      const response = await api.post(`/donations/${donationId}/verify`, verificationData);
+
+      if (response.status === 200) {
+        // Handle success: you could remove the donation from the list or mark it as verified
+        alert("Donation verified successfully.");
+        setDonationsToVerify(donationsToVerify.filter((donation) => donation._id !== donationId));
+      } else {
+        alert("Failed to verify donation.");
+      }
+    } catch (error) {
+      console.error("Error verifying donation:", error);
+      alert("An error occurred while verifying the donation.");
+    }
+  };
 
 
   const handleLike = async () => {
@@ -180,19 +267,6 @@ const PostCard = ({ post, onDelete }) => {
   };
 
 
-  const getImageSrc = () => {
-    if (post.Image) {
-      const { data, contentType } = post.Image;
-
-      const binaryString = String.fromCharCode(...data.data);
-
-      const base64String = window.btoa(binaryString);
-
-      return `data:${contentType};base64,${base64String}`;
-    }
-    return null;
-  };
-
 
   return (
     <div className="post-card bg-white dark:bg-gray-600 text-gray-900 dark:text-gray-200" >
@@ -242,11 +316,27 @@ const PostCard = ({ post, onDelete }) => {
         </p>
         <p
           className="post-card-comments"
-          onClick={() => setShowComments(!showComments)}
+          onClick={() => { setClaimDonation(false); setVerifyDonation(false); setShowComments(!showComments) }}
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="black" d="M12 23a1 1 0 0 1-1-1v-3H7a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-4.1l-3.7 3.71c-.2.19-.45.29-.7.29zm1-6v3.08L16.08 17H21V7H7v10zM3 15H1V3a2 2 0 0 1 2-2h16v2H3z" /></svg>
           {comments.length} Comments
         </p>
+        {/* Claim Donation button for non-post authors */}
+        {post.author.username !== userId && (
+          <p className="post-card-claim-donation " onClick={() => { setVerifyDonation(false); setShowComments(false); setClaimDonation(!claimDonation) }}>
+            Claim Donation
+          </p>
+        )}
+
+        {post.author.username === userId && (
+          <p
+            className={"post-card-claim-donation "}
+            onClick={() => { setClaimDonation(false); setVerifyDonation(!verifyDonation); setShowComments(false) }}
+          >
+            Verify Donation
+          </p>
+        )}
+
         {post.author.username === userId && (
           <div
             className="post-card-delete"
@@ -254,8 +344,60 @@ const PostCard = ({ post, onDelete }) => {
           >
             Delete
           </div>
-        )};
+        )}
       </div>
+      {verifyDonation && donationsToVerify.length === 0 && (
+        <div className="post-card-verify-donation-section dark:bg-gray-600  dark:text-gray-200">
+          <h3 className="dark:text-gray-200 font-bold ">Nothing To Verify</h3>
+        </div>
+      )}
+      {verifyDonation && donationsToVerify.length > 0 && (
+        <div className="post-card-verify-donation-section dark:bg-gray-600  dark:text-gray-200">
+          <h3 className="dark:text-gray-200">Donations to Verify</h3>
+          {donationsToVerify.map((donation) => donation.percentageHelped === 0 && (
+            <div key={donation._id} className="donation-verification-item dark:bg-gray-600  dark:text-gray-200">
+              <p className="dark:text-gray-200"><strong>Donor:</strong> {donation.donorName}</p>
+              <p className="dark:text-gray-200"><strong>Remark:</strong> {donation.remark}</p>
+              <form onSubmit={(e) => handleVerifyDonationSubmit(e, donation._id)}>
+                <label htmlFor={`percentage-${donation._id}`} className="dark:text-gray-200">Percentage Helped:</label>
+                <input
+                  className="text-gray-900"
+                  type="number"
+                  id={`percentage-${donation._id}`}
+                  value={donationPercentage[donation._id] || ""}
+                  onChange={(e) => handleDonationPercentageChange(donation._id, e.target.value)}
+                  placeholder="e.g., 50"
+                  min="0"
+                  max="100"
+                  required
+                />
+                <button type="submit">Verify</button>
+              </form>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Donation Claim Form */}
+      {claimDonation && (
+        <div className="post-card-donation-form dark:bg-gray-600  dark:text-gray-200">
+          <form onSubmit={handleDonationClaim} >
+            <label htmlFor="donationInfo" className="dark:text-gray-200 mr-2">Donation Info:</label>
+            <input
+              className="input-donation-info text-gray-900"
+              type="text"
+              id="donationInfo"
+              placeholder="e.g, Donated 100kg rice"
+              value={donationClaimRemark}
+              onChange={(e) => setDonationClaimRemark(e.target.value)}
+              required
+            />
+            <br />
+            <button type="submit">Claim Donation</button>
+          </form>
+        </div>
+      )}
+
       {showComments && (
         <div className="post-card-comments-section">
           <form onSubmit={handleCommentSubmit} className="post-card-comment-form">
@@ -307,6 +449,7 @@ const PostCard = ({ post, onDelete }) => {
                   </button>
                 )}
               </div>
+
               {comment.replies && comment.replies.length > 0 && (
                 <div className="post-card-replies" style={{ paddingLeft: '5px' }}>
                   {comment.replies.map((reply) => (

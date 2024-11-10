@@ -101,7 +101,17 @@
   display: flex;
   align-items: center;
   color: red;
+  font-weight: bold;
+}
 
+.post-card-claim-donation {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: rgb(56, 208, 56);
+  font-weight: bold;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .post-card-submit-button {
@@ -235,4 +245,148 @@
   margin-left: 40px;
   display: flex;
   align-items: center;
+}
+
+
+/* General container for the donation form */
+.post-card-donation-form {
+  /* margin: 1em 0; */
+  padding: 1em;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  color: #333;
+  gap: 0.5em;
+}
+
+/* Form labels */
+.post-card-donation-form label {
+  font-weight: bold;
+  color: #555;
+}
+
+/* Input field for percentage donation */
+.post-card-donation-form input[type="number"] {
+  width: 100%;
+  padding: 0.6em;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1em;
+  color: #333;
+  outline: none;
+  transition: border 0.3s ease;
+}
+
+.post-card-donation-form input[type="number"]:focus {
+  border: 1px solid #666;
+}
+
+/* Submit button */
+.post-card-donation-form button {
+  padding: 0.5em 0.8em;
+  margin-top: 0.5em;
+  background-color: #28a745;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  align-self: flex-end;
+}
+
+.post-card-donation-form button:hover {
+  background-color: #218838;
+}
+
+/* Error message styling */
+.post-card-donation-error {
+  color: #d9534f;
+  font-size: 0.9em;
+  margin-top: 0.5em;
+}
+
+.post-card-donation-form input[type="number"]::-webkit-inner-spin-button,
+.post-card-donation-form input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.input-donation-info {
+  border: 1px solid #ccc;
+  padding: 8px;
+}
+
+
+
+/* PostCard.css */
+
+.post-card-verify-donation-section {
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+.post-card-verify-donation-section h3 {
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 0.75rem;
+}
+
+.donation-verification-item {
+  padding: 0.75rem;
+  border: 1px solid #dcdcdc;
+  border-radius: 6px;
+  background-color: #fff;
+  margin-bottom: 1rem;
+}
+
+.donation-verification-item p {
+  margin: 0.25rem 0;
+  color: #555;
+}
+
+.donation-verification-item form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.donation-verification-item label {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.donation-verification-item input[type="number"] {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  color: #333;
+}
+
+.donation-verification-item input[type="number"]:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.donation-verification-item button {
+  padding: 0.5rem;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.donation-verification-item button:hover {
+  background-color: #0056b3;
 }

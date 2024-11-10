@@ -138,7 +138,7 @@ export const FullWidthImageSlider = () => {
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 3000, // change the speed to control slide transition
+    autoplaySpeed: 2000, // change the speed to control slide transition
     arrows: false,
   };
 

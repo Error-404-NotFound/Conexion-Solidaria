@@ -35,7 +35,13 @@ const UserSchema = new Schema({
     address: {
         type: String,
         required: true
-    }
+    },
+    donation: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Donation'
+        }
+    ]
 });
 
 UserSchema.plugin(passportLocalMongoose);

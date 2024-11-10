@@ -1,11 +1,14 @@
 import React from 'react';
+import { useAuth } from "../context/AuthContext";
+
 
 export const Dashboard = () => {
+    const { user } = useAuth();
     return (
         <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans transition-colors duration-300 flex">
             {/* Sidebar */}
             <aside className="w-64 bg-gray-800 dark:bg-gray-700 text-white p-6 space-y-8">
-                <h2 className="text-3xl font-bold">Dashboard</h2>
+                <h2 className="text-3xl font-bold">Hi {user.username}</h2>
                 <nav className="space-y-4">
                     <ul>
                         <li><a href="#" className="text-lg hover:text-gray-400">Overview</a></li>

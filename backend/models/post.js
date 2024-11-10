@@ -36,7 +36,14 @@ const PostSchema = new Schema({
             type: Schema.Types.ObjectId,
             ref: 'Comment'
         }
+    ],
+    donation: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Donation'
+        }
     ]
+
 }, { timestamps: true });
 
 module.exports = mongoose.model('Post', PostSchema);

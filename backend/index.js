@@ -25,6 +25,8 @@ const multer = require('multer');
 const { storage } = require('./cloudinary/index');
 const upload = multer({ storage });
 const { cloudinary } = require('./cloudinary/index');
+const Donation = require('./models/Donation');
+
 
 mongoose.connect(process.env.MONGODB_SECRET, {});
 
@@ -57,7 +59,7 @@ const verifyJWT = (req, res, next) => {
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        console.log(decoded);
+        // console.log(decoded);
         req.user = decoded; // Make sure this contains the user ID
         // console.log('Decoded JWT:', req.user); // Log to check the extracted user data
         next();
@@ -401,6 +403,10 @@ app.get('/display-posts', verifyJWT, async (req, res) => {
                 select: 'username', // Fetch only the username of the post author
             })
             .populate({
+                path: 'donation',
+                select: 'donorName remark percentageHelped',
+            })
+            .populate({
                 path: 'comments', // Populate the 'comments' field in Post
                 select: 'comment createdAt likes', // Select specific fields in comments, including createdAt
                 populate: [
@@ -426,6 +432,7 @@ app.get('/display-posts', verifyJWT, async (req, res) => {
         res.status(500).send({ message: 'Internal server error' });
     }
 });
+
 
 
 app.post('/posts/:postId/comments', verifyJWT, async (req, res) => {
@@ -528,6 +535,74 @@ app.post('/comments/:commentId/replies', verifyJWT, async (req, res) => {
         res.status(500).json({ message: 'Server error', error: error.message });
     }
 });
+
+
+app.post('/posts/:postId/donation-claims', verifyJWT, async (req, res) => {
+    const { postId } = req.params;
+    const { donorName, remark } = req.body;
+
+    if (!donorName || !remark) {
+        return res.status(400).json({ message: 'Donor name and remark are required.' });
+    }
+    const post = await Post.findById(postId);
+    if (!post) {
+        return res.status(404).json({ message: 'Post not found.' });
+    }
+
+
+    try {
+        const donationClaim = new Donation({
+            postId,
+            donorName,
+            remark,
+            percentageHelped: 0
+        });
+
+        await donationClaim.save();
+        const user = await User.findOne({ username: donorName });
+        user.donation.push(donationClaim._id);
+        await user.save();
+        post.donation.push(donationClaim._id);
+        await post.save();
+
+        res.status(200).json({ message: 'Donation claim submitted successfully.', donationClaim });
+    } catch (error) {
+        console.error("Error saving donation claim:", error);
+        res.status(500).json({ message: 'An error occurred while saving the donation claim.' });
+    }
+});
+
+
+app.post('/donations/:donationId/verify', verifyJWT, async (req, res) => {
+    try {
+        const { donationId } = req.params;
+        const { percentage } = req.body; // The percentage verified by the post author
+        console.log(percentage);
+        if (!percentage || isNaN(percentage) || percentage < 0 || percentage > 100) {
+            return res.status(400).json({ error: 'Invalid percentage value' });
+        }
+
+
+        // Locate the specific donation
+        const donation = await Donation.findById(donationId);
+        if (!donation) return res.status(404).json({ error: 'Donation not found' });
+
+        // Update the donation's verification percentage
+        donation.percentageHelped = percentage;
+
+        await donation.save();
+
+
+        res.status(200).json({
+            message: 'Donation verification updated successfully',
+            donation,
+        });
+    } catch (error) {
+        console.error('Error verifying donation:', error);
+        res.status(500).json({ error: 'An error occurred while verifying the donation' });
+    }
+});
+
 
 
 app.post('/posts/:postId/likes', verifyJWT, async (req, res) => {
@@ -688,15 +763,15 @@ app.delete('/comments/:commentId/replies/:replyId', verifyJWT, async (req, res) 
 
 
 // need to remove later
-app.delete('/delete-all-posts', async (req, res) => {
-    try {
-        const result = await Post.deleteMany({});
-        res.status(200).json({ message: 'All posts deleted successfully', result });
-    } catch (error) {
-        console.error('Error deleting posts:', error);
-        res.status(500).json({ message: 'Server error', error: error.message });
-    }
-});
+// app.delete('/delete-all-posts', async (req, res) => {
+//     try {
+//         const result = await Post.deleteMany({});
+//         res.status(200).json({ message: 'All posts deleted successfully', result });
+//     } catch (error) {
+//         console.error('Error deleting posts:', error);
+//         res.status(500).json({ message: 'Server error', error: error.message });
+//     }
+// });
 
 
 
