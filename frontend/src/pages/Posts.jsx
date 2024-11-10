@@ -79,15 +79,25 @@ const Posts = () => {
   const [posts, setPosts] = useState([]); // Start with an empty array
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isAddPostVisible, setIsAddPostVisible] = useState(false); // State to control visibility of AddPost
+  const [filteredPosts, setFilteredPosts] = useState([]);
+
+
+  // const toggleAddPostVisibility = () => {
+  //   setIsAddPostVisible(!isAddPostVisible); // Toggle the visibility of the AddPost form
+  // };
 
   const addNewPost = (newPost) => {
     console.log("its ok");
     console.log(newPost);
     setPosts([newPost, ...posts]); // Add new post to the front of the list
+    setFilteredPosts([newPost, ...posts]);
   };
 
   const removePost = (postId) => {
     setPosts(posts.filter(post => post._id !== postId)); // Remove the post with the given ID
+    setFilteredPosts(posts.filter(post => post._id !== postId));
   };
 
   useEffect(() => {
@@ -96,6 +106,7 @@ const Posts = () => {
         console.log("hah");
         const response = await api.get('/display-posts'); // Adjust to your actual endpoint
         setPosts(response.data); // Assuming the response is an array of posts
+        setFilteredPosts(response.data);
         console.log(response.data);
       } catch (err) {
         setError(err.message); // Handle error
@@ -107,19 +118,78 @@ const Posts = () => {
     fetchPosts();
   }, []); // Empty array means this runs once when the component mounts
 
+  const handleSearchChange = (e) => {
+    console.log(e);
+    const query = e.target.value.toLowerCase();
+    // console.log(query);
+    setSearchQuery(query);
+
+    if (query.length === 0) {
+      setFilteredPosts(posts);
+      return;
+    }
+
+    const searchWords = query.split(' ').filter(word => word.trim() !== '');
+
+    const filtered = posts.filter((post) => {
+      const fullName = `${post.author.username}`.toLowerCase();
+      const description = post.Description.toLowerCase();
+
+      return searchWords.some((word) =>
+        fullName.includes(word) || description.includes(word)
+      );
+    });
+
+    setFilteredPosts(filtered);
+  };
+
+
   if (loading) return <div>Loading posts...</div>; // Loading state
   if (error) return <div>Error: {error}</div>; // Error handling
 
   return (
-    <div style={{ display: 'flex', marginTop: '90px', marginBottom: '20px', justifyContent: 'space-around', marginLeft: '2%', marginRight: '2%' }}>
-      <div style={{ width: '75%', maxWidth: '100%', marginLeft: '2%' }}>
-        <AddPost addNewPost={addNewPost} />
+    <div>
+      <div className="posts-container" >
+
+        {/* Conditionally render Add Post Section */}
+        {isAddPostVisible ? (
+          <div className="add-post-section">
+            <AddPost addNewPost={addNewPost} />
+          </div>
+        ) : (
+          <>
+            {/* Search Bar */}
+            <div className="post-card-verify-donation-section dark:bg-gray-600 dark:text-gray-200">
+              <label htmlFor="search" className="search-label mr-2 font-bold">Search:</label>
+              <input
+                type="text"
+                placeholder="Search posts..."
+                value={searchQuery}
+                onChange={handleSearchChange}
+                className="donation-verification-item text-gray-900"
+              />
+            </div>
+          </>
+        )}
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', marginLeft: '3%' }}>
-        {posts.map((post) => (
-          <PostCard key={post._id} post={post} onDelete={removePost} /> // Use unique post._id as key
-        ))}
+      <div style={{ display: 'flex', marginTop: '90px', marginBottom: '20px', justifyContent: 'space-around', marginLeft: '2%', marginRight: '2%' }}>
+        <div style={{ width: '75%', maxWidth: '100%', marginLeft: '2%' }}>
+          <AddPost addNewPost={addNewPost} />
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', marginLeft: '3%' }}>
+          {filteredPosts.length > 0 ? (
+            filteredPosts.map((post) => (
+              <PostCard key={post._id} post={post} onDelete={removePost} />
+            ))
+          ) : (
+            <p>No posts found.</p>
+          )}
+          {/* {posts.map((post) => (
+            <PostCard key={post._id} post={post} onDelete={removePost} /> // Use unique post._id as key
+          ))} */}
+        </div>
       </div>
     </div>
   );
