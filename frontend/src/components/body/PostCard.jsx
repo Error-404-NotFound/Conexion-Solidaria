@@ -352,12 +352,12 @@ const PostCard = ({ post, onDelete }) => {
         </div>
       )}
       {verifyDonation && donationsToVerify.length > 0 && (
-        <div className="post-card-verify-donation-section dark:bg-gray-600  dark:text-gray-200">
+        <div className="post-card-verify-donation-section dark:bg-gray-600  ">
           <h3 className="dark:text-gray-200">Donations to Verify</h3>
           {donationsToVerify.map((donation) => donation.percentageHelped === 0 && (
-            <div key={donation._id} className="donation-verification-item dark:bg-gray-600  dark:text-gray-200">
-              <p className="dark:text-gray-200"><strong>Donor:</strong> {donation.donorName}</p>
-              <p className="dark:text-gray-200"><strong>Remark:</strong> {donation.remark}</p>
+            <div key={donation._id} className="donation-verification-item dark:bg-gray-600  ">
+              <p className=" dark:text-gray-200"><strong className="text-green-500 ">Donor:</strong> {donation.donorName}</p>
+              <p className=" dark:text-gray-200"><strong className="text-green-500 ">Remark:</strong> {donation.remark}</p>
               <form onSubmit={(e) => handleVerifyDonationSubmit(e, donation._id)}>
                 <label htmlFor={`percentage-${donation._id}`} className="dark:text-gray-200">Percentage Helped:</label>
                 <input
