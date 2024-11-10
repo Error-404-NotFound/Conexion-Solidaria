@@ -4,6 +4,7 @@ import { Home } from "../pages/Home";
 import { About } from "../pages/About";
 import { Contact } from "../pages/Contact";
 import { Dashboard } from "../pages/Dashboard";
+import { DonationPage } from "../pages/DonationPage";
 
 import Login from "../pages/Login";
 import Register from "../pages/Register";
@@ -51,7 +52,12 @@ export const router = createBrowserRouter([
                         <Posts />
                     </ProtectedRoute>
                 ),
+            },
+            {
+                path: "/DonationPage",
+                element: <DonationPage />,
             }
+
         ],
     },
 ]);
