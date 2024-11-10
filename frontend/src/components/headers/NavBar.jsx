@@ -10,6 +10,7 @@ const navLinks = [
     {name: 'Home', path: '/'},
     {name: 'About', path: '/about'},
     {name: 'Posts', path: '/posts'},
+    {name: 'Donation', path: '/DonationPage'},
 ];
 
 const theme = createTheme({
@@ -126,7 +127,7 @@ export const NavBar = () => {
                                     </li>
                                 ))
                             }
-
+                            
                             {/* based on users */}
                             {
                                 user ? null : isLogin ?

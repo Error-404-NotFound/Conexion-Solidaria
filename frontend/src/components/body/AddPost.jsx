@@ -66,6 +66,8 @@ const AddPost = ({ addNewPost }) => {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             required
+            placeholder="Describe your post..."
+            className="form-input"
           />
         </div>
 
@@ -78,6 +80,7 @@ const AddPost = ({ addNewPost }) => {
             onChange={handleImageChange}
             ref={imageInputRef} // Attach the ref here
             required
+            className="form-input"
           />
         </div>
 
@@ -88,6 +91,7 @@ const AddPost = ({ addNewPost }) => {
             value={tag}
             onChange={(e) => setTag(e.target.value)}
             required
+            className="form-input"
           >
             <option value="cloth">Cloth</option>
             <option value="shelter">Shelter</option>
@@ -103,6 +107,7 @@ const AddPost = ({ addNewPost }) => {
             value={location}
             onChange={(e) => setLocation(e.target.value)}
             required
+            className="form-input"
           />
         </div>
 

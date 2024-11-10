@@ -1,0 +1,30 @@
+/* DonationPage.css */
+.donation-page-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  .search-bar {
+    margin-bottom: 20px;
+  }
+  
+  .search-input {
+    padding: 10px;
+    width: 100%;
+    max-width: 500px;
+    background-color: #f7fafc;
+    border: 1px solid #cbd5e0;
+    border-radius: 8px;
+    color: #2d3748;
+    font-size: 1em;
+  }
+  
+  .ngo-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+  }
+  
