@@ -46,7 +46,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 const generateJWT = (user) => {
     // console.log(user._id);
     // console.log(user.username);
-    return jwt.sign({ _id: user._id, username: user.username }, JWT_SECRET, { expiresIn: '1d' });
+    return jwt.sign({ _id: user._id, username: user.username }, process.env.JWT_SECRET, { expiresIn: '1d' });
 };
 
 
