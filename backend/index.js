@@ -25,14 +25,14 @@ const multer = require('multer');
 const { storage } = require('./cloudinary/index');
 const upload = multer({ storage });
 const { cloudinary } = require('./cloudinary/index');
-const Donation = require('./models/Donation');
+const Donation = require('./models/donation');
 
 
 mongoose.connect(process.env.MONGODB_SECRET, {});
 
 // middleware
 app.use(cors({
-    origin: 'http://localhost:5173' || 'http://localhost:5174', // Replace with your front-end URL
+    origin: process.env.WEBSITE_URL, // Replace with your front-end URL
     credentials: true // Allow credentials (cookies, authorization headers)
 }));
 app.use(express.json());
