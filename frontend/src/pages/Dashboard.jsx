@@ -11,10 +11,10 @@ export const Dashboard = () => {
                 <h2 className="text-3xl font-bold">Hi {user.username}</h2>
                 <nav className="space-y-4">
                     <ul>
-                        <li><a href="#" className="text-lg hover:text-gray-400">Overview</a></li>
-                        <li><a href="#" className="text-lg hover:text-gray-400">Users</a></li>
-                        <li><a href="#" className="text-lg hover:text-gray-400">Reports</a></li>
-                        <li><a href="#" className="text-lg hover:text-gray-400">Settings</a></li>
+                        <li><a href="/" className="text-lg hover:text-gray-400">Home</a></li>
+                        <li><a href="/posts" className="text-lg hover:text-gray-400">Posts</a></li>
+                        <li><a href="/DonationPage" className="text-lg hover:text-gray-400">Donation</a></li>
+                        <li><a href="/profile" className="text-lg hover:text-gray-400">Profile</a></li>
                     </ul>
                 </nav>
             </aside>

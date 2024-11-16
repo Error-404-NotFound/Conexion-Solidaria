@@ -1,41 +1,39 @@
+/* Container for posts and additional sections */
 .posts-container {
     display: flex;
     flex-direction: column;
-    /* Stack elements vertically */
     align-items: center;
-    /* Center-align elements */
-    margin-top: 100px;
-    margin-bottom: 20px;
+    width: 100%;
+    margin-top: 20px;
     padding: 0 2%;
     position: relative;
-    /* Ensure that sticky button is relative to this container */
-
 }
 
-/* Sticky Button for adding a post */
-
-
-/* Add Post Section */
-.add-post-section {
+/* Controls Section (Search bar, layout toggle, and add post button) */
+.controls-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     width: 100%;
-    max-width: 100%;
+    max-width: 1200px;
     margin-bottom: 20px;
+    padding: 10px 0;
 }
 
-/* Search Bar */
+/* Search bar container */
 .search-bar {
-    width: 100%;
-    max-width: 100%;
-    margin-bottom: 20px;
+    flex: 1; /* Take up the remaining space */
+    margin-right: 10px;
 }
 
+/* Styling for the search input */
 .search-input {
     padding: 8px;
     width: 100%;
     background-color: #f7fafc;
     border: 1px solid #cbd5e0;
     border-radius: 8px;
-    transition: all 0.3s;
+    transition: all 0.3s ease;
     color: #2d3748;
     font-size: 1em;
 }
@@ -43,42 +41,34 @@
 .search-input:focus {
     outline: none;
     border-color: #007BFF;
-    /* Highlight on focus */
 }
 
-/* Posts List Section */
-.posts-list {
-    display: flex;
-    flex-direction: column;
-    /* Stack posts vertically */
-    width: 100%;
-    gap: 20px;
-    /* Space between posts */
-    padding: 0 5%;
-    /* Adjust padding around posts */
+/* Toggle layout button */
+.toggle-layout-btn {
+    margin-right: 10px;
+    background-color: #007BFF;
+    border: 1px solid #cbd5e0;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex; /* Align the icon and text in a row */
+    align-items: center; /* Vertically center the icon and text */
+    justify-content: center; /* Center the items horizontally */
+    margin-top: auto;
 }
 
-/* Styling for 'No posts found' message */
-.posts-list p {
-    font-size: 1.2em;
-    color: #666;
-    text-align: center;
+.toggle-layout-btn svg {
+    margin-right: 8px; /* Add some space between the icon and the text */
 }
 
-/* Media query for larger screens */
-@media (min-width: 768px) {
-    .posts-container {
-        padding: 0 5%;
-        /* Increase padding on larger screens */
-    }
-
-    .posts-list {
-        gap: 30px;
-        /* Increase the gap between posts on larger screens */
-    }
+.toggle-layout-btn:hover {
+    background-color: #0056b3;
+    border-color: #24282c;
 }
 
-/* Sticky Button for adding a post */
+/* Publish New Post Button */
 .toggle-add-post-btn {
     background-color: #007BFF;
     color: white;
@@ -88,21 +78,82 @@
     border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-
-    position: fixed;
-    /* Fix the button position relative to the viewport */
-    bottom: 30px;
-    /* Distance from the bottom of the viewport */
-    right: 30px;
-    /* Distance from the right of the viewport */
-    z-index: 10;
-    /* Keep it on top of other content */
+    margin-top: auto;
 }
 
 .toggle-add-post-btn:hover {
     background-color: #0056b3;
 }
 
-.toggle-add-post-btn:focus {
-    outline: none;
+/* Section for adding a post */
+.add-post-section {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 20px;
+}
+
+/* Container for posts list */
+.posts-display {
+    width: 100%;
+    max-width: 1200px; /* Adjust the max-width as per your design */
+    padding: 0 5%;
+}
+
+/* Layout for posts in list view */
+.list-layout {
+    display: flex;
+    flex-direction: column; /* Align posts in a single column */
+    gap: 20px; /* Space between each post card */
+}
+
+/* Layout for posts in grid view */
+.grid-layout {
+    display: flex;
+    flex-wrap: wrap; /* Allow posts to wrap into new rows */
+    gap: 20px; /* Space between cards */
+}
+
+/* Each post card takes up one-third of the row in grid view */
+.grid-layout .post-card-container {
+    width: calc(33.33% - 20px); /* 3 items per row with some space between them */
+}
+
+/* Each post card takes up the full width of the row in list view */
+.list-layout .post-card-container {
+    width: 100%; /* Full width in list view */
+}
+
+/* Styling for 'No posts found' message */
+.no-posts-message {
+    font-size: 1.2em;
+    color: #666;
+    text-align: center;
+}
+
+/* Media query for larger screens */
+@media (min-width: 768px) {
+    .posts-container {
+        padding: 0 5%;
+    }
+
+    .posts-list {
+        gap: 30px;
+    }
+
+    .controls-section {
+        margin-bottom: 30px;
+    }
+}
+
+/* Post Card Holder */
+.post-holder {
+    width: 100%;
+}
+
+.post-card-holder {
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: flex-start;
 }

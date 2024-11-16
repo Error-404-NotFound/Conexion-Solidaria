@@ -42,7 +42,8 @@ export const Home = () => {
       */}
 
       <div className="text-gray-400 dark:text-gray-500 flex-1 pt-14 space-y-8 pl-16">
-        Welcome to Conexion-Solidaria
+        {/* Welcome to Conexion-Solidaria */}
+
       </div>
       {/* Full-width image slider */}
       <FullWidthImageSlider />
@@ -143,7 +144,7 @@ export const FullWidthImageSlider = () => {
   };
 
   return (
-    <div className="relative w-full pt-4" >
+    <div className="relative w-full pt-6" >
       <Slider {...settings}>
         <div>
           <img

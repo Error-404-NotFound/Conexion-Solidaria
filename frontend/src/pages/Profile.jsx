@@ -1,6 +1,11 @@
 import React from 'react';
+import { useAuth } from "../context/AuthContext";
+
 
 export const ProfileCard = () => {
+  const { user } = useAuth();
+  const date = new Date();
+
   return (
     <div className="dark:bg-gray-900 mt-0 mb-20 flex justify-center">
       <div className="relative bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans p-10 transition-colors duration-500 ease-in-out">
@@ -12,7 +17,7 @@ export const ProfileCard = () => {
               alt="Profile"
               className="w-24 h-24 rounded-full mb-3 shadow-lg border-4 border-gray-700 dark:border-gray-800 transition-all duration-500"
             />
-            <h2 className="text-2xl font-bold transition-all duration-500">Aniket Johri</h2>
+            <h2 className="text-2xl font-bold transition-all duration-500">{user.username}</h2>
             <p className="text-pink-400 dark:text-pink-300 text-sm mt-1 transition-colors duration-500">📍 Tirupati</p>
           </div>
 
@@ -21,19 +26,19 @@ export const ProfileCard = () => {
             {/* Phone */}
             <div className="flex items-center space-x-3 transition-all duration-500">
               <img src="/public/phone.png" alt="Phone" className="w-6 h-6 shadow-md transition-all duration-500" />
-              <span>7069774750</span>
+              <span>{user.phone}</span>
             </div>
 
             {/* Email */}
             <div className="flex items-center space-x-3 transition-all duration-500">
               <img src="/public/email.png" alt="Email" className="w-6 h-6 shadow-md transition-all duration-500" />
-              <span>cs22b028@iittp.ac.in</span>
+              <span>{user.email}</span>
             </div>
 
             {/* Date */}
             <div className="flex items-center space-x-3 transition-all duration-500">
               <img src="/public/calender.png" alt="Calendar" className="w-6 h-6 shadow-md transition-all duration-500" />
-              <span>01/09/2024</span>
+              <span>{date.toDateString()}</span>
             </div>
 
             {/* Amounts */}

@@ -1,8 +1,8 @@
-import { createTheme, Switch } from '@mui/material';
+import { createTheme, Switch, IconButton } from '@mui/material';
 import React, { useEffect } from 'react';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
-import { FaBars } from 'react-icons/fa';
+import { FaBars, FaMoon, FaSun } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { useAuth } from '../../context/AuthContext';
 
@@ -30,7 +30,7 @@ export const NavBar = () => {
     const [isFixed, setIsFixed] = React.useState(false);
     const [isDarkMode, setIsDarkMode] = React.useState(false);
     const [navBg, setNavBg] = React.useState('bg-gradient-to-r from-[#15151580] to-[#33333380]');
-    const [navbarHeight, setNavbarHeight] = React.useState('h-24'); // Start with a larger navbar height (e.g., h-24)
+    const [navbarHeight, setNavbarHeight] = React.useState('h-20'); // Start with a larger navbar height (e.g., h-20)
     const { user, logout } = useAuth();
 
     const toggleMobileMenu = () => {
@@ -54,7 +54,7 @@ export const NavBar = () => {
             setNavbarHeight('h-16'); // Shrink navbar height after scrolling
         } else {
             setNavBg(`${isHome ? 'bg-transparent' : 'bg-white dark:bg-gray-900'}`);
-            setNavbarHeight('h-24'); // Reset navbar height when at top
+            setNavbarHeight('h-20'); // Reset navbar height when at top
         }
     }, [scrollPosition, isHome]);
 
@@ -80,15 +80,15 @@ export const NavBar = () => {
             transition={{ duration: 0.5 }}
             className={`${navBg} ${isFixed ? "fixed" : "sticky"} top-0 transition-all duration-300 ease-in-out w-full z-50 shadow-lg border-b border-gray-200 dark:border-gray-700 ${navbarHeight}`}
         >
-            <div className="lg:w-[95%] mx-auto sm:px-6 lg:px-6 ">
-                <div className="px-4 py-2 flex items-center justify-between">
+            <div className="lg:w-[95%] mx-auto sm:px-2 lg:px-3 ">
+                <div className="px-3 py-2 flex items-center justify-between">
                     {/* Logo */}
                     <div>
                         <h1 className="text-xl inline-flex gap-3 items-center font-bold text-black dark:text-white">
                             Conexion-Solidaria
                             <img src="../../../public/yoga-logo.png" alt="" className="w-6 h-6" />
                         </h1>
-                        <p className="font-semibold text-[12px] tracking-[1px] text-black dark:text-gray-300">
+                        <p className="font-semibold text-[9px] tracking-[1px] text-black dark:text-gray-200">
                             Connecting Communities
                         </p>
                     </div>
@@ -98,7 +98,7 @@ export const NavBar = () => {
                         <button
                             type="button"
                             onClick={toggleMobileMenu}
-                            className="text-gray-600 hover:text-primary dark:text-gray-300 focus:outline-none"
+                            className="text-gray-600 hover:text-primary dark:text-gray-200 focus:outline-none"
                         >
                             <FaBars className="h-5 w-5" />
                         </button>
@@ -112,7 +112,7 @@ export const NavBar = () => {
                                     <NavLink
                                         to={link.path}
                                         className={({ isActive }) =>
-                                            `font-semibold text-base ${isActive ? 'text-secondary' : 'text-gray-700 dark:text-gray-300'} hover:text-primary dark:hover:text-secondary transition-colors duration-200`
+                                            `font-semibold text-base ${isActive ? 'text-secondary' : 'text-gray-900 dark:text-gray-200'} hover:text-primary dark:hover:text-secondary transition-colors duration-200`
                                         }
                                     >
                                         {link.name}
@@ -123,7 +123,7 @@ export const NavBar = () => {
                                 <li>
                                     <NavLink
                                         to="/register"
-                                        className="font-semibold text-base text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-secondary transition-colors duration-200"
+                                        className="font-semibold text-base text-gray-900 dark:text-gray-200 hover:text-primary dark:hover:text-secondary transition-colors duration-200"
                                     >
                                         Register
                                     </NavLink>
@@ -132,7 +132,7 @@ export const NavBar = () => {
                                 <li>
                                     <NavLink
                                         to="/login"
-                                        className="font-semibold text-base text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-secondary transition-colors duration-200"
+                                        className="font-semibold text-base text-gray-900 dark:text-gray-200 hover:text-primary dark:hover:text-secondary transition-colors duration-200"
                                     >
                                         Login
                                     </NavLink>
@@ -142,13 +142,21 @@ export const NavBar = () => {
                                     <li>
                                         <NavLink
                                             to="/dashboard"
-                                            className="font-semibold text-base text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-secondary transition-colors duration-200"
+                                            className="font-semibold text-base text-gray-900 dark:text-gray-200 hover:text-primary dark:hover:text-secondary transition-colors duration-200"
                                         >
                                             Dashboard
                                         </NavLink>
                                     </li>
                                     <li>
-                                        <img src={user?.photoURL || 'https://via.placeholder.com/150'} alt={user?.displayName} className="w-6 h-6 rounded-full" />
+                                        <li key="/profile">
+                                            <NavLink
+                                                to="/profile"
+                                                className="font-semibold text-base text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-secondary transition-colors duration-200"
+                                            >
+                                                <img src={user?.photoURL || '../src/assets/home/girl.jpg'} alt={user?.displayName} className="w-6 h-6 rounded-full" />
+                                            </NavLink>
+                                        </li>
+                                        {/* <img src={user?.photoURL || '../src/assets/home/girl.jpg'} alt={user?.displayName} className="w-6 h-6 rounded-full" /> */}
                                     </li>
                                     <li>
                                         <button
@@ -159,28 +167,24 @@ export const NavBar = () => {
                                     </li>
                                 </>
                             )}
+                            {/* {user &&
+                                (<li key="/profile">
+                                    <NavLink
+                                        to="/profile"
+                                        className="font-semibold text-base text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-secondary transition-colors duration-200"
+                                    >
+                                        <img src={user?.photoURL || '../src/assets/home/girl.jpg'} alt={user?.displayName} className="w-6 h-6 rounded-full" />
+                                    </NavLink>
+                                </li>)
+                            } */}
                             {/* Dark Mode Toggle */}
                             <li>
-                                <ThemeProvider theme={theme}>
-                                    <div className="flex items-center">
-                                        <Switch checked={isDarkMode} onChange={() => setIsDarkMode(!isDarkMode)} />
-                                        <span className="ml-1 text-xs text-gray-500 dark:text-gray-400">Light/Dark</span>
-                                    </div>
-                                </ThemeProvider>
-                            </li>
-
-                            {/* Desktop Menu */}
-                            <li key="/profile">
-                                <NavLink
-                                    to="/profile"
-                                    className="font-semibold text-base text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-secondary transition-colors duration-200"
-                                >
-                                    <img src="https://via.placeholder.com/150" alt="Profile" className="w-6 h-6 rounded-full" />
-                                </NavLink>
+                                <IconButton onClick={() => setIsDarkMode(!isDarkMode)} className="text-gray-500 dark:text-gray-400">
+                                    {isDarkMode ? <FaMoon /> : <FaSun />}
+                                </IconButton>
                             </li>
                         </ul>
                     </div>
-
                 </div>
             </div>
         </motion.nav>

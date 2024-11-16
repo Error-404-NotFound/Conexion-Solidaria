@@ -32,7 +32,7 @@ const timeAgo = (date) => {
 };
 
 
-const PostCard = ({ post, onDelete }) => {
+const PostCard = ({ post, onDelete, isGridLayout }) => {
   // console.log("donation");
   // console.log(post.donation);
   const { posts } = Posts();
@@ -49,6 +49,7 @@ const PostCard = ({ post, onDelete }) => {
   const filteredDonations = post.donation.filter(donation => donation.percentageHelped === 0);
   const [donationsToVerify, setDonationsToVerify] = useState(filteredDonations);
   const [donationPercentage, setDonationPercentage] = useState({});
+
 
   const handleDonationPercentageChange = (donationId, value) => {
     // console.log(donationId);
@@ -302,7 +303,7 @@ const PostCard = ({ post, onDelete }) => {
         </div>
 
         {post.Image && (
-          <img src={post.Image.url} alt="Post" className="post-card-image" />
+          <img src={post.Image.url} alt="Post" className={`post-card-image ${isGridLayout ? '' : 'list-layout'}`} />
         )}
       </div>
       <div className="post-card-footer">

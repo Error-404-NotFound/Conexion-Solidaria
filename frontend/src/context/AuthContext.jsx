@@ -10,9 +10,14 @@ export const AuthProvider = ({ children }) => {
     // Function to check if the user is authenticated
     const checkAuth = async () => {
         try {
-            const response = await api.get("/is-LoggedIn");
+            console.log("jahaah");
+            console.log(user);
+            const response = await api.get("/is-LoggedIn", {
+                user,
+            });
             // console.log(response.data.user);
-            setUser(response.data.user);  // Assuming your backend returns user info on protected endpoints
+            console.log(response.data);
+            setUser(response.data);  // Assuming your backend returns user info on protected endpoints
         } catch (error) {
             console.log("Got Error:" + error);
             setUser(null);  // In case of error (user not authenticated)
@@ -29,6 +34,7 @@ export const AuthProvider = ({ children }) => {
 
 
     const login = (userData) => {
+        console.log(userData);
         // console.log(userData);
         setUser(userData); // Save user data or token
     };

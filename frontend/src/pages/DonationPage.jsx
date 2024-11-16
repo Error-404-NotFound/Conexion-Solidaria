@@ -26,7 +26,7 @@ export const DonationPage = () => {
             <h2 className='mt-2 text-2xl dark:text-gray-200'>Donate to NGOs</h2>
 
             {/* Search Bar */}
-            <div className="post-card-verify-donation-section dark:bg-gray-600 dark:text-gray-200">
+            <div className="search-bar dark:bg-gray-600 dark:text-gray-200">
                 <label htmlFor="search" className="search-label mr-2 font-bold">Search:</label>
                 <input
                     id="search"
@@ -34,7 +34,7 @@ export const DonationPage = () => {
                     placeholder="Search for NGOs..."
                     value={searchQuery}
                     onChange={handleSearchChange}
-                    className="donation-verification-item text-gray-900"
+                    className="search-input text-gray-900"
                 />
             </div>
 

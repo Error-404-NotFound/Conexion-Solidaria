@@ -308,7 +308,7 @@ app.post('/login', (req, res, next) => {
             sameSite: 'Strict',  // Prevent CSRF attacks
             maxAge: 24 * 60 * 60 * 1000  // Cookie expires in 1 day
         });
-        res.status(200).send({ username: user.username, message: 'Login successful', redirectUrl: '/posts' });
+        res.status(200).send({ username: user.username, phone: user.phone, email: user.email, message: 'Login successful', redirectUrl: '/posts' });
     })(req, res, next);
 });
 
@@ -330,7 +330,7 @@ app.post('/register', async (req, res) => {
             maxAge: 24 * 60 * 60 * 1000  // 1 day expiration
         });
 
-        res.status(200).send({ username: username, message: 'User registered successfully', token, redirectUrl: '/posts' });
+        res.status(200).send({ username: newUser.username, phone: newUser.phone, email: newUser.email, message: 'User registered successfully', token, redirectUrl: '/posts' });
 
     } catch (error) {
         console.error(error);
@@ -351,9 +351,12 @@ app.post('/logout', (req, res) => {
 });
 
 
-app.get('/is-LoggedIn', verifyJWT, (req, res) => {
+app.get('/is-LoggedIn', verifyJWT, async (req, res) => {
+    console.log("user");
+    console.log(req.user);
+    const user = await User.findById(req.user._id);
     // console.log(req.user);
-    res.send({ user: req.user, message: "You are authenticated!" });
+    res.send({ username: user.username, phone: user.phone, email: user.email, message: "You are authenticated!" });
 });
 
 
