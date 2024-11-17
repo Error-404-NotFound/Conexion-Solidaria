@@ -305,7 +305,7 @@ app.post('/login', (req, res, next) => {
             // _id: user._id,
             httpOnly: true,   // Cannot be accessed from JavaScript (XSS protection)
             secure: process.env.NODE_ENV === 'production',  // Only over HTTPS in production
-            sameSite: 'Strict',  // Prevent CSRF attacks
+            sameSite: 'None',  // Prevent CSRF attacks
             maxAge: 24 * 60 * 60 * 1000  // Cookie expires in 1 day
         });
         res.status(200).send({ username: user.username, phone: user.phone, email: user.email, message: 'Login successful', redirectUrl: '/posts' });
@@ -326,7 +326,7 @@ app.post('/register', async (req, res) => {
             // _id: registeredUser._id,
             httpOnly: true,   // To prevent XSS attacks
             secure: process.env.NODE_ENV === 'production',  // Only use HTTPS in production
-            sameSite: 'Strict',  // Prevent CSRF
+            sameSite: 'None',  // Prevent CSRF
             maxAge: 24 * 60 * 60 * 1000  // 1 day expiration
         });
 
@@ -344,7 +344,7 @@ app.post('/logout', (req, res) => {
         httpOnly: true,  // Cannot be accessed from JavaScript (XSS protection)
         secure: process.env.NODE_ENV === 'production',  // Secure only in production
         expires: new Date(0),  // Set cookie expiration to the past
-        sameSite: 'Strict'  // CSRF protection
+        sameSite: 'None'  // CSRF protection
     });
 
     res.status(200).send({ message: 'Logged out successfully', redirectUrl: '/login' });
