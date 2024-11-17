@@ -52,7 +52,7 @@ const Posts = () => {
     const searchWords = query.split(' ').filter(word => word.trim() !== '');
 
     const filtered = posts.filter((post) => {
-      const fullName = `${post.author.username}`.toLowerCase();
+      const fullName = ${post.author.username}.toLowerCase();
       const description = post.Description.toLowerCase();
 
       return searchWords.some((word) =>
@@ -111,10 +111,10 @@ const Posts = () => {
             <AddPost addNewPost={addNewPost} />
           </div>
         ) : (
-          <div className={`posts-display ${isGridLayout ? 'grid-layout' : 'list-layout'}`}>
+          <div className={posts-display ${isGridLayout ? 'grid-layout' : 'list-layout'}}>
             {filteredPosts.length > 0 ? (
               filteredPosts.map((post) => (
-                <div className="post-card-container" key={post._id}>
+                <div className="post-card-container" key={post._id} >
                   <PostCard post={post} onDelete={removePost} isGridLayout={isGridLayout} />
                 </div>
               ))
