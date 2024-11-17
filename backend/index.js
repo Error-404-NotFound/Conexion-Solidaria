@@ -498,7 +498,7 @@ app.post('/comments/:commentId/replies', verifyJWT, async (req, res) => {
     const { commentId } = req.params; // Get the comment ID from the URL parameters
     const { author, createdAt, reply } = req.body; // Destructure the reply data from the request body
     console.log(author.username);
-    console.log(author._id);
+    // console.log(author._id);
     try {
         // Find the comment by ID
         const commentToUpdate = await Comment.findById(commentId);
@@ -510,7 +510,7 @@ app.post('/comments/:commentId/replies', verifyJWT, async (req, res) => {
         const newReply = Reply({
             username: author.username,
             author: {
-                _id: author._id, // Assuming author._id is a valid ObjectId
+                _id: req.user._id, // Assuming author._id is a valid ObjectId
             },
             // createdAt: createdAt || new Date().toISOString(),
             reply: reply, // The reply text
