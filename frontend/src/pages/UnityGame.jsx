@@ -28,7 +28,7 @@ function UnityGame() {
       window.addEventListener('resize', setCanvasSize);
 
       // Load the Unity WebGL build files
-      const buildUrl = `../public/Build`;
+      const buildUrl = "/Build";
       const loaderUrl = buildUrl + "/App2_se.loader.js";
       const config = {
         dataUrl: buildUrl + "/App2_se.data",
