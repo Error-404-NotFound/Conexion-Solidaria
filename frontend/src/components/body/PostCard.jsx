@@ -18,17 +18,17 @@ const timeAgo = (date) => {
   const seconds = Math.floor((now - parsedDate) / 1000);
   let interval = Math.floor(seconds / 31536000); // Years
 
-  if (interval >= 1) return ${interval} year${interval === 1 ? '' : 's'} ago;
+  if (interval >= 1) return `${interval} year${interval === 1 ? '' : 's'} ago`;
   interval = Math.floor(seconds / 2592000); // 30 days
-  if (interval >= 1) return ${interval} month${interval === 1 ? '' : 's'} ago;
+  if (interval >= 1) return `${interval} month${interval === 1 ? '' : 's'} ago`;
   interval = Math.floor(seconds / 86400); // Days
-  if (interval >= 1) return ${interval} day${interval === 1 ? '' : 's'} ago;
+  if (interval >= 1) return `${interval} day${interval === 1 ? '' : 's'} ago`;
   interval = Math.floor(seconds / 3600); // Hours
-  if (interval >= 1) return ${interval} hour${interval === 1 ? '' : 's'} ago;
+  if (interval >= 1) return `${interval} hour${interval === 1 ? '' : 's'} ago`;
   interval = Math.floor(seconds / 60); // Minutes
-  if (interval >= 1) return ${interval} minute${interval === 1 ? '' : 's'} ago;
+  if (interval >= 1) return `${interval} minute${interval === 1 ? '' : 's'} ago`;
 
-  return ${seconds} second${seconds === 1 ? '' : 's'} ago;
+  return `${seconds} second${seconds === 1 ? '' : 's'} ago`;
 };
 
 
@@ -77,7 +77,7 @@ const PostCard = ({ post, onDelete, isGridLayout }) => {
       };
 
       // Send the claim data to the backend API
-      const response = await api.post(/posts/${post._id}/donation-claims, claimData);
+      const response = await api.post(`/posts/${post._id}/donation-claims`, claimData);
 
       if (response.status === 200) {
         // Successfully submitted the donation claim
@@ -115,7 +115,7 @@ const PostCard = ({ post, onDelete, isGridLayout }) => {
       };
 
       // Make the API call to verify the donation
-      const response = await api.post(/donations/${donationId}/verify, verificationData);
+      const response = await api.post(`/donations/${donationId}/verify`, verificationData);
 
       if (response.status === 200) {
         // Handle success: you could remove the donation from the list or mark it as verified
@@ -138,12 +138,12 @@ const PostCard = ({ post, onDelete, isGridLayout }) => {
     try {
       if (isLiked) {
         // Unlike the post
-        await api.delete(/posts/${post._id}/likes, { data: { userId: currentUserId } });
+        await api.delete(`/posts/${post._id}/likes`, { data: { userId: currentUserId } });
 
         setLikes(likes.filter((id) => id !== currentUserId));
       } else {
         // Like the post
-        await api.post(/posts/${post._id}/likes, { userId: currentUserId });
+        await api.post(`/posts/${post._id}/likes`, { userId: currentUserId });
         setLikes([...likes, currentUserId]);
       }
     } catch (error) {
@@ -158,7 +158,7 @@ const PostCard = ({ post, onDelete, isGridLayout }) => {
     if (!confirmDelete) return;
 
     try {
-      await api.delete(/posts/${post._id});
+      await api.delete(`/posts/${post._id}`);
       console.log("Post deleted");
       if (onDelete) {
         onDelete(post._id);
@@ -175,7 +175,7 @@ const PostCard = ({ post, onDelete, isGridLayout }) => {
     if (!confirmDelete) return;
 
     try {
-      await api.delete(/posts/${post._id}/comments/${commentId});
+      await api.delete(`/posts/${post._id}/comments/${commentId}`);
       setComments(comments.filter((comment) => comment._id !== commentId));
       console.log("Comment deleted");
     } catch (error) {
@@ -185,7 +185,7 @@ const PostCard = ({ post, onDelete, isGridLayout }) => {
 
   const handleDeleteReply = async (commentId, replyId) => {
     try {
-      await api.delete(/comments/${commentId}/replies/${replyId});
+      await api.delete(`/comments/${commentId}/replies/${replyId}`);
 
       setComments((prevComments) =>
         prevComments.map((comment) => {
@@ -219,7 +219,7 @@ const PostCard = ({ post, onDelete, isGridLayout }) => {
       };
 
       try {
-        const response = await api.post(/posts/${post._id}/comments, newCommentData);
+        const response = await api.post(`/posts/${post._id}/comments`, newCommentData);
         setComments([...comments, response.data.comment]);
         setNewComment("");
       } catch (error) {
@@ -247,7 +247,7 @@ const PostCard = ({ post, onDelete, isGridLayout }) => {
     };
 
     try {
-      const response = await api.post(/comments/${commentId}/replies, replyData);
+      const response = await api.post(`/comments/${commentId}/replies`, replyData);
       console.log("Here");
       const newReply = response.data.reply;
       const updatedComments = comments.map(comment => {
@@ -274,7 +274,7 @@ const PostCard = ({ post, onDelete, isGridLayout }) => {
       <div className="post-card-header">
         <img
           src={userprofile}
-          alt={${post.author.username}}
+          alt={`${post.author.username}`}
           className="post-card-user-image"
         />
         <div className="post-card-user-info">
@@ -291,7 +291,7 @@ const PostCard = ({ post, onDelete, isGridLayout }) => {
         <div className="post-card-description">
           {showAll
             ? post.Description
-            : ${post.Description.slice(0, 100)}...}
+            : `${post.Description.slice(0, 100)}...`}
           {post.Description.length > 100 && (
             <span
               className="post-card-toggle-text"
@@ -303,7 +303,7 @@ const PostCard = ({ post, onDelete, isGridLayout }) => {
         </div>
 
         {post.Image && (
-          <img style={{width: '100%', height:'100%'}} src={post.Image.url} alt="Post" className={post-card-image ${isGridLayout ? '' : 'list-layout'}} />
+          <img style={{width: '100%', height:'100%'}} src={post.Image.url} alt="Post" className={`post-card-image ${isGridLayout ? '' : 'list-layout'}`} />
         )}
       </div>
       <div className="post-card-footer">
@@ -360,11 +360,11 @@ const PostCard = ({ post, onDelete, isGridLayout }) => {
               <p className=" dark:text-gray-200"><strong className="text-green-500 ">Donor:</strong> {donation.donorName}</p>
               <p className=" dark:text-gray-200"><strong className="text-green-500 ">Remark:</strong> {donation.remark}</p>
               <form onSubmit={(e) => handleVerifyDonationSubmit(e, donation._id)}>
-                <label htmlFor={percentage-${donation._id}} className="dark:text-gray-200">Percentage Helped:</label>
+                <label htmlFor={`percentage-${donation._id}`} className="dark:text-gray-200">Percentage Helped:</label>
                 <input
                   className="text-gray-900"
                   type="number"
-                  id={percentage-${donation._id}}
+                  id={`percentage-${donation._id}`}
                   value={donationPercentage[donation._id] || ""}
                   onChange={(e) => handleDonationPercentageChange(donation._id, e.target.value)}
                   placeholder="e.g., 50"
