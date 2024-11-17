@@ -7,6 +7,7 @@ import "./TextScroll.css"; // Import custom CSS for animation
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css"; // Import slick carousel CSS
 import "slick-carousel/slick/slick-theme.css"; // Import slick theme CSS
+import { Link } from 'react-router-dom';
 
 const img3 = "https://images.unsplash.com/photo-1608342381036-15657da6bf58?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
 const img1 = imbg;
@@ -226,7 +227,7 @@ export const WhyUS = () => {
 
         {/* Button */}
         <button className="mt-8 bg-white dark:bg-gray-800 text-black dark:text-white border-2 border-black dark:border-white rounded-full py-2 px-6 flex items-center hover:bg-gray-100 dark:hover:bg-gray-700 transition">
-          <span className="mr-2"> Get Involved</span>
+          <span className="mr-2"> <Link to='/game'>Awarness Game</Link> </span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
