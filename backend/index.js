@@ -454,7 +454,7 @@ app.post('/posts/:postId/comments', verifyJWT, async (req, res) => {
         // Create a new comment object
         const newComment = new Comment({
             author: {
-                _id: author._id, // Assuming author._id is available
+                _id: req.user._id, // Assuming author._id is available
             },
             username: author.username,
             createdAt: createdAt || new Date().toISOString(),
