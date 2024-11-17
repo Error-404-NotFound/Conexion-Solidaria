@@ -13,7 +13,7 @@ export const ProfileCard = () => {
           {/* Profile Image and Name */}
           <div className="flex flex-col items-center transition-all duration-500 ease-in-out">
             <img
-              src="/public/pphoto.png"
+              src="/pphoto.png"
               alt="Profile"
               className="w-24 h-24 rounded-full mb-3 shadow-lg border-4 border-gray-700 dark:border-gray-800 transition-all duration-500"
             />
@@ -25,30 +25,30 @@ export const ProfileCard = () => {
           <div className="mt-6 space-y-4">
             {/* Phone */}
             <div className="flex items-center space-x-3 transition-all duration-500">
-              <img src="/public/phone.png" alt="Phone" className="w-6 h-6 shadow-md transition-all duration-500" />
+              <img src="/phone.png" alt="Phone" className="w-6 h-6 shadow-md transition-all duration-500" />
               <span>{user.phone}</span>
             </div>
 
             {/* Email */}
             <div className="flex items-center space-x-3 transition-all duration-500">
-              <img src="/public/email.png" alt="Email" className="w-6 h-6 shadow-md transition-all duration-500" />
+              <img src="/email.png" alt="Email" className="w-6 h-6 shadow-md transition-all duration-500" />
               <span>{user.email}</span>
             </div>
 
             {/* Date */}
             <div className="flex items-center space-x-3 transition-all duration-500">
-              <img src="/public/calender.png" alt="Calendar" className="w-6 h-6 shadow-md transition-all duration-500" />
+              <img src="/calender.png" alt="Calendar" className="w-6 h-6 shadow-md transition-all duration-500" />
               <span>{date.toDateString()}</span>
             </div>
 
             {/* Amounts */}
             <div className="flex justify-between mt-4 transition-all duration-500">
               <div className="flex items-center space-x-3">
-                <img src="/public/income.png" alt="Amount" className="w-6 h-6 shadow-md transition-all duration-500" />
+                <img src="/income.png" alt="Amount" className="w-6 h-6 shadow-md transition-all duration-500" />
                 <span>Rs. 20000</span>
               </div>
               <div className="flex items-center space-x-3">
-                <img src="/public/donate.png" alt="Donate" className="w-6 h-6 shadow-md transition-all duration-500" />
+                <img src="/donate.png" alt="Donate" className="w-6 h-6 shadow-md transition-all duration-500" />
                 <span>Rs. 100</span>
               </div>
             </div>
@@ -56,13 +56,13 @@ export const ProfileCard = () => {
             {/* Additional Details */}
             <div className="flex justify-between items-center mt-4 transition-all duration-500">
               <div className="flex items-center space-x-5">
-                <img src="/public/badge1.png" alt="Badge" className="w-11 h-11 shadow-md transition-all duration-500" />
-                <img src="/public/badge2.png" alt="Badge" className="w-11 h-11 shadow-md transition-all duration-500" />
+                <img src="/badge1.png" alt="Badge" className="w-11 h-11 shadow-md transition-all duration-500" />
+                <img src="/badge2.png" alt="Badge" className="w-11 h-11 shadow-md transition-all duration-500" />
               </div>
             </div>
 
             <div className="flex items-center space-x-3 mt-4 transition-all duration-500">
-              <img src="/public/idk.png" alt="Gallery" className="w-6 h-6 shadow-md transition-all duration-500" />
+              <img src="/idk.png" alt="Gallery" className="w-6 h-6 shadow-md transition-all duration-500" />
               <span>04</span>
             </div>
           </div>
