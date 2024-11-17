@@ -9,7 +9,7 @@ import girlImage from '../../assets/home/girl.jpg';
 
 const navLinks = [
     { name: 'Home', path: '/' },
-    { name: 'About', path: '/about' },
+    // { name: 'About', path: '/about' },
     { name: 'Posts', path: '/posts' },
     { name: 'Donation', path: '/DonationPage' },
     { name: 'Involve', path: '/game' },
