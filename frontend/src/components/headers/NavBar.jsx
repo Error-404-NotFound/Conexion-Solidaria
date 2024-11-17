@@ -5,6 +5,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import { FaBars, FaMoon, FaSun } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { useAuth } from '../../context/AuthContext';
+import girlImage from '../../assets/home/girl.jpg';
 
 const navLinks = [
     { name: 'Home', path: '/' },
@@ -86,7 +87,7 @@ export const NavBar = () => {
                     <div>
                         <h1 className="text-xl inline-flex gap-3 items-center font-bold text-black dark:text-white">
                             Conexion-Solidaria
-                            <img src="../../../public/yoga-logo.png" alt="" className="w-6 h-6" />
+                            <img src="/yoga-logo.png" alt="" className="w-6 h-6" />
                         </h1>
                         <p className="font-semibold text-[9px] tracking-[1px] text-black dark:text-gray-200">
                             Connecting Communities
@@ -153,7 +154,7 @@ export const NavBar = () => {
                                                 to="/profile"
                                                 className="font-semibold text-base text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-secondary transition-colors duration-200"
                                             >
-                                                <img src={user?.photoURL || '../src/assets/home/girl.jpg'} alt={user?.displayName} className="w-6 h-6 rounded-full" />
+                                                <img src={user?.photoURL || girlImage} alt={user?.displayName} className="w-6 h-6 rounded-full" />
                                             </NavLink>
                                         </li>
                                         {/* <img src={user?.photoURL || '../src/assets/home/girl.jpg'} alt={user?.displayName} className="w-6 h-6 rounded-full" /> */}
