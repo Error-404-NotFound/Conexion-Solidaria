@@ -1,3 +1,4 @@
+
 /* Container for posts and additional sections */
 .posts-container {
     display: flex;
@@ -111,11 +112,16 @@
     display: flex;
     flex-wrap: wrap; /* Allow posts to wrap into new rows */
     gap: 20px; /* Space between cards */
+    margin-left: 5px;
+    margin-right: 5px;
+    padding-left: 5px;
+    padding-right: 5PX;
+    /* width:'380px'; */
 }
 
 /* Each post card takes up one-third of the row in grid view */
 .grid-layout .post-card-container {
-    width: calc(33.33% - 20px); /* 3 items per row with some space between them */
+    width: 370px; /* 3 items per row with some space between them */
 }
 
 /* Each post card takes up the full width of the row in list view */
