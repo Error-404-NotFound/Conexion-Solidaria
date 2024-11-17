@@ -183,7 +183,7 @@ const UnityGame = () => {
       <h1>WebGL App (Unity or Other WebGL Content)</h1>
       <iframe
         title="WebGL Unity Game"
-        src="/index.html"  // Pointing to the WebGL build's index.html inside the public folder
+        src="index.html"  // Pointing to the WebGL build's index.html inside the public folder
         width="100%"
         height="800px"
         frameBorder="0"
