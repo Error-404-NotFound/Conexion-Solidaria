@@ -5,7 +5,7 @@ import { About } from "../pages/About";
 import { Contact } from "../pages/Contact";
 import { Dashboard } from "../pages/Dashboard";
 import { DonationPage } from "../pages/DonationPage";
-
+import UnityGame from "../pages/UnityGame";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Posts from "../pages/Posts";
@@ -65,6 +65,10 @@ export const router = createBrowserRouter([
             {
                 path: "/DonationPage",
                 element: <DonationPage />,
+            },
+            {
+                path: "/game",
+                element: <UnityGame />,
             }
 
         ],

@@ -12,6 +12,7 @@ const navLinks = [
     { name: 'About', path: '/about' },
     { name: 'Posts', path: '/posts' },
     { name: 'Donation', path: '/DonationPage' },
+    { name: 'Involve', path: '/game' },
 ];
 
 const theme = createTheme({
